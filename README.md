@@ -1,6 +1,8 @@
 # Event-App
 
-docs: https://s-pace.github.io/react-native/docs/getting-started.html
+### Helpful Links
+1. docs: https://s-pace.github.io/react-native/docs/getting-started.html
+2. youtube:
 
 workflow:
 1. branch off of main and name your branch the component you are working on
