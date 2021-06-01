@@ -9,10 +9,10 @@ import { firebaseConfig } from './firebase';
 import Login from './pages/Login';
 import CreateAccount from './pages/CreateAccount';
 import Dashboard from './pages/Dashboard';
-import Friends from './pages/Friends';
-import Search from './pages/Search';
-import CreateEvent from './pages/CreateEvent';
-import Settings from './pages/Settings';
+import Friends from './components/Friends';
+import Search from './components/Search';
+import CreateEvent from './components/CreateEvent';
+import Settings from './components/Settings';
 
 
 export default function App() {
