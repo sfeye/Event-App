@@ -1,83 +1,94 @@
-import React, { Component } from 'react'
-import { Text, View, Button, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import firebase from 'firebase';
-
-export class Login extends Component {
+ 
+ const Login = ({navigation}) => {
 
     // --- State ----------------- //
-    state = { email: '', password: '', errorMessage: '', loading: false };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     // --------------------------- //
 
     // --- Helpers --------------- //
-    onLoginSuccess() {
-        this.props.navigation.navigate('Dashboard');
-    }
+    const onLoginSuccess = () => {
+        setLoading(false);
+    };
 
-    onLoginFailure(errorMessage) {
-        this.setState({ error: errorMessage, loading: false });
-    }
-
-    renderLoading() {
-        if (this.state.loading) {
-          return (
-              <ActivityIndicator size={'large'} />
-          );
-        }
-    }
+    const onLoginFailure = (error) => {
+        setLoading(false);
+        alert(error);
+    };
     // --------------------------- //
 
     // --- Sign In Form Submit --- //
-    async signInWithEmail() {
-        this.setState({ loading: true });
-        await firebase
+    const signInWithEmail = () => {
+        setLoading(true);
+        firebase
           .auth()
-          .signInWithEmailAndPassword('samfeye@gmail.com', 'admin1')
-          .then(this.onLoginSuccess.bind(this))
+          .signInWithEmailAndPassword('samfeye@gmail.com', 'Admin1')
+          .then(onLoginSuccess)
           .catch(error => {
-              this.onLoginFailure.bind(this)(error.message);
+            onLoginFailure(error);
             });
-        }
-    // --------------------------- //
-
-    // --- Sign Up Form Submit --- //
-    // This can live in the sign up screen when created
-    async signUpWithEmail() {
-        await firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.state.email, this.state.password)
-          .then(this.onLoginSuccess.bind(this))
-          .catch(error => {
-              let errorCode = error.code;
-              let errorMessage = error.message;
-              if (errorCode == 'auth/weak-password') {
-                  this.onLoginFailure.bind(this)('Weak Password!');
-              } else {
-                  this.onLoginFailure.bind(this)(errorMessage);
-              }
-          });
-      }
+        };
     // --------------------------- //
 
     // --- Sign In Open Form ----- //
     // Card ID: COMP-3
     // --------------------------- //
 
-    // --- Sign Up Open Form ----- //
-    // Card ID: COMP-1
-    // --------------------------- //
+    return (
+        <View style={styles.container}>
+            <Image style={styles.logo} source={require('../assets/logo.png')}/>
+            
+            <TouchableOpacity style={styles.signin} onPress={() => signInWithEmail()}>
+                { loading ? (<ActivityIndicator color='#fff' size='large'/>) 
+                    : (<Text style={styles.signintext}>Sign In</Text>) }
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.signup} title='Sign Up' onPress={() => navigation.push("CreateAccount")}>
+                <Text style={styles.signuptext}>Sign Up</Text>
+            </TouchableOpacity>
+        </View>
+    )
+ } 
 
-
-    render() {
-        return (
-            <View>
-                {this.renderLoading()}
-                <Button title='Sign In' onPress={() => this.signInWithEmail()}/>
-                <Text style={{ fontSize: 10, textAlign: 'center', color: 'red', width: '50%' }}>
-                    {this.state.error}
-                </Text>
-            </View>
-        )
+ const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 0
+    },
+    logo: {
+        position: 'absolute',
+        top: 0
+    },
+    error: {
+        fontSize: 10,
+        textAlign: 'center', 
+        color: 'red', 
+        width: '50%'
+    },
+    signin: {
+        alignItems: 'center',
+        backgroundColor: '#add8e6',
+        width: 150,
+        padding: 10,
+        borderRadius: 5,
+        margin: 10
+    },
+    signintext: {fontSize: 25},
+    signuptext: {
+        fontSize: 18,
+        color: 'blue'
+    },
+    signup: {
+        alignItems: "center",
+        padding: 10
     }
-}
+});
 
 export default Login
