@@ -1,11 +1,11 @@
 # Event-App
 
 ### Helpful Links
-1. docs 
-  1. https://s-pace.github.io/react-native/docs/getting-started.html
-  2. https://reactnative.dev/docs/0.60/activityindicator
-2. youtube:
-  1. https://www.youtube.com/watch?v=nQVCkqvU1uE
+* documentation 
+  + https://s-pace.github.io/react-native/docs/getting-started.html
+  + https://reactnative.dev/docs/0.60/activityindicator
+* youtube:
+  + https://www.youtube.com/watch?v=nQVCkqvU1uE
     1. we are switching the react navigation v5 because that's what everyone uses 🤷‍♂️
 
 
