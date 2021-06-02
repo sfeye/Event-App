@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 
 const EventCard = ({username, eventId, postedBy, location, datetime, description, accepted, declined}) => {
+    const active = accepted.includes(username.toString());
   // --- State ----------------- //
     const [loading, setLoading] = useState(false);
-    const [going, setGoing] = useState(false);
-    const [notGoing, setNotGoing] = useState(false);
+    const [going, setGoing] = useState(active);
+    const [notGoing, setNotGoing] = useState(!active);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -80,7 +81,7 @@ const EventCard = ({username, eventId, postedBy, location, datetime, description
                 </TouchableOpacity>
 
                 <TouchableOpacity style={(notGoing ? styles.declineBoldBtn : styles.declineBtn)} onPress={() => declineEvent()} disabled={loading || notGoing}>
-                    <Text style={(going ? styles.declineBoldTxt : styles.declineTxt)}>Decline? +{declined.length}</Text>
+                    <Text style={(notGoing ? styles.declineBoldTxt : styles.declineTxt)}>Decline? +{declined.length}</Text>
                 </TouchableOpacity>
             </View>
         </View>

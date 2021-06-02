@@ -33,10 +33,10 @@ const Dashboard = ({route, navigation}) => {
         <Text>Welcome to the dashboard {route.params.user.email}!</Text>
         <Button title="Log Off" onPress={() => firebase.auth().signOut()}/>
         {eventCards ? (eventCards.map(({id, eventCard}) => (
-          <View>
+          <View key={id}>
             <EventCard 
               key={id}
-              username={eventCard.email}
+              username={route.params.user.email}
               eventId={id}
               postedBy={eventCard.email}
               location={eventCard.location}
