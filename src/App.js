@@ -9,7 +9,7 @@ import firebase from 'firebase';
 import { firebaseConfig } from './firebase';
 import Login from './pages/Login';
 import CreateAccount from './pages/CreateAccount';
-import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import Friends from './components/Friends';
 import Search from './components/Search';
 import CreateEvent from './components/CreateEvent';
@@ -127,7 +127,7 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tabs.Screen name="Home" component={Dashboard} initialParams={{user: authUser}} />
+        <Tabs.Screen name="Home" component={Home} initialParams={{user: authUser}} />
         <Tabs.Screen name="Search" component={SearchStackScreen} />
         <Tabs.Screen name="CreateEvent" component={CreateEventStackScreen} options={{title: "Create Event"}}/>
         <Tabs.Screen name="Friends" component={FriendStackScreen} />

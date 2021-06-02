@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 
 const EventCard = ({username, eventId, postedBy, location, datetime, description, accepted, declined}) => {
-    const active = accepted.includes(username.toString());
+    const active1 = accepted.includes(username.toString());
+    const active2 = declined.includes(username.toString());
   // --- State ----------------- //
     const [loading, setLoading] = useState(false);
-    const [going, setGoing] = useState(active);
-    const [notGoing, setNotGoing] = useState(!active);
+    const [going, setGoing] = useState(active1);
+    const [notGoing, setNotGoing] = useState(active2);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -65,11 +66,11 @@ const EventCard = ({username, eventId, postedBy, location, datetime, description
         <View style={styles.container}>
             <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
 
+            <Text style={styles.description}>Description: {description}</Text>
+
             <Text style={styles.location}>Location: {location}</Text>
 
             <Text style={styles.dateTime}>Date & Time: {datetime}</Text>
-
-            <Text style={styles.description}>Description: {description}</Text>
 
             <TouchableOpacity style={styles.invitedFriends} onPress={() => alert('todo')} disabled={loading}>
                 <Text>Invited Friends</Text>
@@ -90,14 +91,28 @@ const EventCard = ({username, eventId, postedBy, location, datetime, description
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
       borderStyle: 'solid',
-      borderWidth: 2,
-      maxHeight: '60%'
+      borderWidth: 1,
+      padding: 15,
+      borderRadius: 10,
+      marginTop: 10,
     },
+    invitedFriends: {
+        borderRadius: 20,
+        marginTop: 10,
+        margin: 2.5,
+        backgroundColor: '#add8e6',
+        padding: 10,
+        maxWidth: '50%',
+        alignSelf: 'flex-start'
+    },
+    postedBy: {
+        fontWeight: '600',
+    },
+    location: {},
+    dateTime: {},
+    description: {},
+    // --- Accept/Decline BTNS --- //
     btnContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap'
@@ -107,14 +122,14 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 20,
         marginTop: 10,
-        margin: 2.5
+        margin: 3
     },
     goingBoldBtn: {
         backgroundColor:'#9bf09b',
         padding: 5,
         borderRadius: 20,
         marginTop: 10,
-        margin: 2.5
+        margin: 3
     },
     goingTxt: {
         fontWeight:'300'
@@ -142,6 +157,7 @@ const styles = StyleSheet.create({
     declineBoldTxt: {
         fontWeight:'600'
     }
+    // --------------------------- //
   });
 
 export default EventCard
