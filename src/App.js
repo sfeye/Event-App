@@ -13,6 +13,7 @@ import Friends from './components/Friends';
 import Search from './components/Search';
 import CreateEvent from './components/CreateEvent';
 import Settings from './components/Settings';
+import InviteFriends from './components/InviteFriends';
 
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
   else { firebase.app(); }
   // --------------------------- //
 
-
+  // --- Authenticate User ----- //
   const [authUser, setUser] = useState(null);
 
   useEffect(() => {
@@ -33,6 +34,36 @@ export default function App() {
       unsubscribe();
     }
   })
+  // --------------------------- //
+
+  
+  // --- Stacks ---------------- //
+  const CreateEventStackScreen = () => (
+    <CreateEventStack.Navigator>
+      <CreateEventStack.Screen name="Create" component={CreateEvent} options={{title:"Create Event"}} initialParams={{user: authUser}}/>
+      <CreateEventStack.Screen name="InviteFriends" component={InviteFriends} options={{title:"Invite Friends"}} />
+    </CreateEventStack.Navigator>
+  );
+
+  const SearchStackScreen = () => (
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="Search" component={Search}/>
+    </SearchStack.Navigator>
+  );
+  
+  const FriendStackScreen = () => (
+    <FriendStack.Navigator>
+      <FriendStack.Screen name="Friends" component={Friends}/>
+    </FriendStack.Navigator>
+  );
+  
+  const SettingStackScreen = () => (
+    <SettingStack.Navigator>
+      <SettingStack.Screen name="Settings" component={Settings}/>
+    </SettingStack.Navigator>
+  );
+  // --------------------------- //
+
 
   return (
     authUser ? (
@@ -62,30 +93,6 @@ const FriendStack = createStackNavigator();
 const SettingStack = createStackNavigator();
 
 const Tabs = createBottomTabNavigator();
-
-const SearchStackScreen = () => (
-  <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={Search}/>
-  </SearchStack.Navigator>
-);
-
-const CreateEventStackScreen = () => (
-  <CreateEventStack.Navigator>
-    <CreateEventStack.Screen name="CreateEvent" component={CreateEvent} options={{title:"Create Event"}}/>
-  </CreateEventStack.Navigator>
-);
-
-const FriendStackScreen = () => (
-  <FriendStack.Navigator>
-    <FriendStack.Screen name="Friends" component={Friends}/>
-  </FriendStack.Navigator>
-);
-
-const SettingStackScreen = () => (
-  <SettingStack.Navigator>
-    <SettingStack.Screen name="Settings" component={Settings}/>
-  </SettingStack.Navigator>
-);
 
 const styles = StyleSheet.create({
   container: {
