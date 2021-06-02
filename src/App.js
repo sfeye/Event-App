@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, TabActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import { firebaseConfig } from './firebase';
 import Login from './pages/Login';
@@ -40,26 +41,26 @@ export default function App() {
   // --- Stacks ---------------- //
   const CreateEventStackScreen = () => (
     <CreateEventStack.Navigator>
-      <CreateEventStack.Screen name="Create" component={CreateEvent} options={{title:"Create Event"}} initialParams={{user: authUser}}/>
+      <CreateEventStack.Screen name="Create Page" component={CreateEvent} options={{title:"Create Event"}} initialParams={{user: authUser}}/>
       <CreateEventStack.Screen name="InviteFriends" component={InviteFriends} options={{title:"Invite Friends"}} />
     </CreateEventStack.Navigator>
   );
 
   const SearchStackScreen = () => (
     <SearchStack.Navigator>
-      <SearchStack.Screen name="Search" component={Search}/>
+      <SearchStack.Screen name="SearchStack" component={Search} options={{title:"Search"}} />
     </SearchStack.Navigator>
   );
   
   const FriendStackScreen = () => (
     <FriendStack.Navigator>
-      <FriendStack.Screen name="Friends" component={Friends}/>
+      <FriendStack.Screen name="FriendStack" component={Friends} options={{title:"Your Friends"}} />
     </FriendStack.Navigator>
   );
   
   const SettingStackScreen = () => (
     <SettingStack.Navigator>
-      <SettingStack.Screen name="Settings" component={Settings}/>
+      <SettingStack.Screen name="ProfileSettings" component={Settings} options={{title:"Profile Settings"}} />
     </SettingStack.Navigator>
   );
   // --------------------------- //
@@ -68,8 +69,65 @@ export default function App() {
   return (
     authUser ? (
     <NavigationContainer>
-      <Tabs.Navigator>
-        <Tabs.Screen name="Home" component={Dashboard} initialParams={{user: authUser}}/>
+      <Tabs.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            if (route.name === 'Home') {
+              return (
+                <Ionicons
+                  name={
+                    focused
+                      ? 'home'
+                      : 'home-outline'
+                  }
+                  size={size}
+                  color={color}
+                />
+              );
+            } else if (route.name === 'Settings') {
+              return (
+                <Ionicons
+                  name={focused ? 'settings' : 'settings-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
+            else if (route.name === 'Search') {
+              return (
+                <Ionicons
+                  name={focused ? 'search' : 'search-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
+            else if (route.name === 'CreateEvent') {
+              return (
+                <Ionicons
+                  name={focused ? 'add-circle' : 'add-circle-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
+            else if (route.name === 'Friends') {
+              return (
+                <Ionicons
+                  name={focused ? 'people' : 'people-outline'}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tabs.Screen name="Home" component={Dashboard} initialParams={{user: authUser}} />
         <Tabs.Screen name="Search" component={SearchStackScreen} />
         <Tabs.Screen name="CreateEvent" component={CreateEventStackScreen} options={{title: "Create Event"}}/>
         <Tabs.Screen name="Friends" component={FriendStackScreen} />
