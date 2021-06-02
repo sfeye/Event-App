@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Image, TextInput, ScrollView } from 'react-native'
 import firebase from 'firebase';
  
  const Login = ({navigation}) => {
@@ -26,7 +26,7 @@ import firebase from 'firebase';
         setLoading(true);
         firebase
           .auth()
-          .signInWithEmailAndPassword('samfeye@gmail.com', 'Admin1')
+          .signInWithEmailAndPassword(email, password)
           .then(onLoginSuccess)
           .catch(error => {
             onLoginFailure(error);
@@ -39,8 +39,38 @@ import firebase from 'firebase';
     // --------------------------- //
 
     return (
+        
+       // <ScrollView style={styles.scrollView} keyboardDismissMode="interactive"> 
+
+
         <View style={styles.container}>
             <Image style={styles.logo} source={require('../assets/logo.png')}/>
+
+            <View style={styles.inputView}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="Email..."
+                    value={email}
+                    placeholderTextColor="#003f5c"
+                    onChangeText={setEmail}
+                
+                />
+            </View>
+            <View style={styles.inputView}>
+                <TextInput 
+                    secureTextEntry
+                    style={styles.inputText}
+                    placeholder="Password"
+                    value={password}
+                    placeholderTextColor="#003f5c"
+                    onChangeText={setPassword}
+                
+                />
+            </View>
+
+            <TouchableOpacity > 
+                <Text style={styles.forgot}>Forgot password?</Text>
+            </TouchableOpacity>
             
             <TouchableOpacity style={styles.signin} onPress={() => signInWithEmail()}>
                 { loading ? (<ActivityIndicator color='#fff' size='large'/>) 
@@ -51,6 +81,9 @@ import firebase from 'firebase';
                 <Text style={styles.signuptext}>Sign Up</Text>
             </TouchableOpacity>
         </View>
+
+        
+        //</ScrollView>
     )
  } 
 
@@ -88,6 +121,26 @@ import firebase from 'firebase';
     signup: {
         alignItems: "center",
         padding: 10
+    },
+    inputText: {
+        height:50,
+        color:"blue"
+    },
+    forgot: {
+        color:"blue",
+        fontSize: 15
+    },
+    inputView: {
+        width:"80%",
+        backgroundColor: "yellow",
+        borderRadius: 25,
+        height:50,
+        marginBottom: 20,
+        justifyContent: "center",
+        padding:20
+    },
+    scrollView: {
+        backgroundColor: 'white'
     }
 });
 
