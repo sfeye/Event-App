@@ -22,11 +22,13 @@ const CreateEvent = ({route, navigation}) => {
         setDate(new Date());
         setDescription('');
         setFriends([]);
+        setLoading(false);
     }
     // --------------------------- //
 
     // --- Post to DB ------------ //
     const createEvent = () => {
+        setLoading(true);
         
         firebase
         .firestore()
@@ -88,10 +90,8 @@ const CreateEvent = ({route, navigation}) => {
                     <Text>+Friends {friends.length}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.createBtn} onPress={() => createEvent()}>
-                    <Text style={styles.createTxt}>
-                        {loading ? <ActivityIndicator color='black' size='large'/> : "Create Event"}
-                    </Text>
+                <TouchableOpacity style={styles.createBtn} onPress={() => createEvent()} disabled={loading}>
+                    <Text style={styles.createTxt}>Create Event</Text>
                 </TouchableOpacity>
                 
             </View>
