@@ -68,7 +68,7 @@ import firebase from 'firebase';
                 />
             </View>
 
-            <TouchableOpacity > 
+            <TouchableOpacity onPress={() => navigation.push("ForgotPassword")}> 
                 <Text style={styles.forgot}>Forgot password?</Text>
             </TouchableOpacity>
             

@@ -15,6 +15,7 @@ import Search from './components/Search';
 import CreateEvent from './components/CreateEvent';
 import Settings from './components/Settings';
 import InviteFriends from './components/InviteFriends';
+import ForgotPassword from './components/ForgotPassword'
 
 
 export default function App() {
@@ -139,6 +140,7 @@ export default function App() {
       <AuthStack.Navigator>
         <AuthStack.Screen name="Login" component={Login}/>
         <AuthStack.Screen name="CreateAccount" component={CreateAccount} options={{title: "Create Account"}}/>
+        <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{title: "Forgot Password"}}/>
       </AuthStack.Navigator>
     </NavigationContainer>)
   );
