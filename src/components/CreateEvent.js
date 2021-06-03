@@ -1,18 +1,34 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, InputAccessoryView, ScrollView } from 'react-native';
 import firebase from 'firebase';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const CreateEvent = ({route, navigation}) => {
-
     // --- State ----------------- //
     const [location, setLocation] = useState('');
-    const [datetime, setDatetime] = useState('');
+    const [datetime, setDate] = useState(new Date());
     const [description, setDescription] = useState('');
     const [friends, setFriends] = useState([]);
+    const [loading, setLoading] = useState(false);
+    // --------------------------- //
+
+    // --- Helpers --------------- //
+    const onChangeDate = (event, selectedDate) => {
+        setDate(selectedDate);
+    };
+
+    const resetState = () => {
+        setLocation('');
+        setDate(new Date());
+        setDescription('');
+        setFriends([]);
+        setLoading(false);
+    }
     // --------------------------- //
 
     // --- Post to DB ------------ //
     const createEvent = () => {
+        setLoading(true);
         
         firebase
         .firestore()
@@ -22,12 +38,15 @@ const CreateEvent = ({route, navigation}) => {
             email: route.params.user.email,
             // username: route.params.user.username,
             location: location,
-            datetime: datetime,
+            date: datetime,
             description: description,
             friends: friends,
+            accepted: [],
+            declined: []
         })
         .then(() => {
             alert('Event added!');
+            resetState();
         })
         .catch(error => {
             alert(error);
@@ -40,7 +59,14 @@ const CreateEvent = ({route, navigation}) => {
         <ScrollView style={styles.scrollView} keyboardDismissMode="interactive">
             <View style={styles.container}>
 
-                <Text style={styles.title}>Create Event by {route.params.user.email}</Text>
+                <Text style={styles.title}>Hi {route.params.user.email}, let's create an event!</Text>
+
+                <TextInput
+                style={styles.input}
+                onChangeText={setDescription}
+                placeholder="Name or description"
+                value={description}
+                />
 
                 <TextInput
                 style={styles.input}
@@ -49,27 +75,25 @@ const CreateEvent = ({route, navigation}) => {
                 value={location}
                 />
 
-                <TextInput
-                style={styles.input}
-                onChangeText={setDatetime}
-                placeholder="Date & Time"
-                value={datetime}
-                />
-
-                <TextInput
-                style={styles.input}
-                onChangeText={setDescription}
-                placeholder="Description"
-                value={description}
-                />
+                <View style={styles.datePickers}>
+                    <DateTimePicker
+                        testID="datePicker"
+                        value={datetime}
+                        mode={'datetime'}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChangeDate}
+                    />
+                </View>
 
                 <TouchableOpacity style={styles.inviteFriends} onPress={() => navigation.push("InviteFriends")}>
                     <Text>+Friends {friends.length}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.createBtn} onPress={() => createEvent()}>
+                <TouchableOpacity style={styles.createBtn} onPress={() => createEvent()} disabled={loading}>
                     <Text style={styles.createTxt}>Create Event</Text>
                 </TouchableOpacity>
+                
             </View>
         </ScrollView>
     )
@@ -82,13 +106,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 15,
         fontWeight: '500',
-        marginBottom: 10
+        marginBottom: 10,
+        alignSelf: 'center',
+        padding: 15
     },
     container: {
-        marginTop: 50,
+        marginTop: '15%',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         height: '100%'
     },
     input: {
@@ -96,26 +120,34 @@ const styles = StyleSheet.create({
         height: 45,
         borderWidth: 1,
         width: '80%',
-        padding: 10
+        padding: 10,
+        alignSelf: 'center'
     },
     inviteFriends: {
-        alignSelf: "flex-start",
-        marginLeft: '10%',
-        backgroundColor: '#ECECEC',
+        alignSelf: "center",
+        backgroundColor: '#c8f7c8',
         padding: 10,
         borderRadius: 20,
-        marginTop: 10
+        marginTop: 25,
+        marginBottom: 25
     },
     createBtn: {
-        backgroundColor: '#add8e6',
+        backgroundColor: '#ececec',
         padding: 10,
         borderRadius: 10,
-        marginTop: 10
+        marginTop: 10,
+        alignSelf: 'center',
+        width: '60%'
     },
     createTxt: {
         justifyContent: 'center',
         fontSize: 20,
         alignSelf: 'center'
+    },
+    datePickers: {
+        alignSelf: 'center',
+        marginTop: 10,
+        width: '60%'
     }
   });
 
