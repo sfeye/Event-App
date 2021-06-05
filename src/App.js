@@ -10,7 +10,7 @@ import { firebaseConfig } from "./firebase";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import Home from "./pages/Home";
-import Friends from "./components/Friends";
+import Friends from "./components/FriendPageComponents/Friends";
 import Search from "./components/Search";
 import CreateEvent from "./components/CreateEvent";
 import Settings from "./components/Settings";
@@ -72,6 +72,7 @@ export default function App() {
         name="FriendStack"
         component={Friends}
         options={{ title: "Your Friends" }}
+        initialParams={{ user: authUser }}
       />
     </FriendStack.Navigator>
   );
