@@ -46,7 +46,7 @@ export default function App() {
         name="Create Page"
         component={CreateEvent}
         options={{ title: "Create Event" }}
-        initialParams={{ user: authUser }}
+        initialParams={{ user: authUser.email }}
       />
       <CreateEventStack.Screen
         name="InviteFriends"
@@ -72,7 +72,7 @@ export default function App() {
         name="FriendStack"
         component={Friends}
         options={{ title: "Your Friends" }}
-        initialParams={{ user: authUser }}
+        initialParams={{ user: authUser.email }}
       />
     </FriendStack.Navigator>
   );
@@ -144,7 +144,7 @@ export default function App() {
         <Tabs.Screen
           name="Home"
           component={Home}
-          initialParams={{ user: authUser }}
+          initialParams={{ user: authUser.email }}
         />
         <Tabs.Screen name="Search" component={SearchStackScreen} />
         <Tabs.Screen
