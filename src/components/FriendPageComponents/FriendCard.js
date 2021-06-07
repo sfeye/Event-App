@@ -1,17 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
+import { Card, Avatar } from "react-native-elements";
 
 const FriendCard = ({ name, email, avatar, phone, friendArr }) => {
+  const initials = name.split(" ");
   return (
     <View>
       <Card>
         <View>
-          <Ionicons
-            style={{ fontSize: 30 }}
-            name="person-circle"
-            color="gray"
+          <Avatar
+            size="small"
+            rounded
+            title={initials.shift().charAt(0) + initials.pop().charAt(0)}
+            source={{ uri: avatar }}
           />
           <Text>{name}</Text>
           <Text>{email}</Text>

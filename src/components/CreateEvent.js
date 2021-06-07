@@ -43,7 +43,7 @@ const CreateEvent = ({ route, navigation }) => {
       .collection("events")
       .add({
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        email: route.params.user.email,
+        email: route.params.user,
         // username: route.params.user.username,
         location: location,
         date: datetime,
@@ -66,7 +66,7 @@ const CreateEvent = ({ route, navigation }) => {
     <ScrollView style={styles.scrollView} keyboardDismissMode="interactive">
       <View style={styles.container}>
         <Text style={styles.title}>
-          Hi {route.params.user.email}, let's create an event!
+          Hi {route.params.user}, let's create an event!
         </Text>
 
         <TextInput

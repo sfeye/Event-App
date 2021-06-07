@@ -24,7 +24,7 @@ const Friends = ({ route, navigation }) => {
     const unsubscribe = firebase
       .firestore()
       .collection("users")
-      .where("email", "==", route.params.user.email)
+      .where("email", "==", route.params.user)
       .onSnapshot((snapshot) => {
         setFriendResults(
           snapshot.docs.map((doc) => ({

@@ -43,7 +43,7 @@ const Home = ({ route, navigation }) => {
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.headerTxt}>
-              Logged in as {route.params.user.email}
+              Logged in as {route.params.user}
             </Text>
 
             <TouchableOpacity
@@ -58,7 +58,7 @@ const Home = ({ route, navigation }) => {
             ? eventCards.map(({ id, eventCard }) => (
                 <EventCard
                   key={id}
-                  username={route.params.user.email}
+                  username={route.params.user}
                   eventId={id}
                   postedBy={eventCard.email}
                   location={eventCard.location}
