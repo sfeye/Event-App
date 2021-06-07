@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -96,7 +96,13 @@ const CreateEvent = ({ route, navigation }) => {
 
         <TouchableOpacity
           style={styles.inviteFriends}
-          onPress={() => navigation.push("InviteFriends")}
+          onPress={() =>
+            navigation.push("InviteFriends", {
+              email: route.params.user,
+              friends: friends,
+              setFriends: setFriends,
+            })
+          }
         >
           <Text>+Friends {friends.length}</Text>
         </TouchableOpacity>
