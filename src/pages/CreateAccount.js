@@ -21,7 +21,7 @@ const CreateAccount = ({ navigation }) => {
   // --- Helpers --------------- //
   const onCreateSuccess = () => {
     setLoading(false);
-    alert("Success");
+    createNewUser();
   };
 
   const onCreateFailure = (error) => {
@@ -29,6 +29,26 @@ const CreateAccount = ({ navigation }) => {
     setErrorMessage(error);
   };
   // --------------------------- //
+
+  //add new user to users collection
+  const createNewUser = () => {
+    firebase
+      .firestore()
+      .collection("users")
+      .add({
+        avatar: null,
+        email: email,
+        friends: [],
+        name: name,
+        phone: phoneNumber,
+      })
+      .then(() => {
+        alert("Success");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
 
   // --- Sign Up Form Submit --- //
   const signUpWithEmail = () => {
