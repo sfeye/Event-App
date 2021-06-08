@@ -2,40 +2,38 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { CheckBox, Card } from "react-native-elements";
 
-const InviteFriendCard = ({
-  addSelected,
-  removeSelected,
-  friend,
-  invitedFriends,
-}) => {
+const InviteFriendCard = ({ friend, invitedFriends, addSelected }) => {
   // --- State ----------------- //
-  const [selected, setSelected] = useState(isAlreadyInvited(friend));
+  const [invite, setInvite] = useState({
+    friend: friend,
+    selected: false,
+  });
   // --------------------------- //
 
   // --- Helpers --------------- //
   const select = () => {
-    if (!selected) {
-      setSelected(!selected);
-      addSelected(friend);
-    } else {
-      setSelected(!selected);
-      removeSelected(friend);
-    }
+    setInvite({ selected: !invite.selected });
+    addSelected(invite);
   };
 
   function isAlreadyInvited(friend) {
     if (invitedFriends.includes(friend)) {
-      return true;
+      setInvite({ selected: true });
+    } else {
+      setInvite({ selected: false });
     }
-    return false;
   }
+
+  useEffect(() => {
+    isAlreadyInvited(friend);
+  }, []);
   // --------------------------- //
 
   return (
     <View>
       <Card style={styles.alreadyInvited}>
         <View style={styles.card}>
-          <CheckBox checked={selected} onPress={() => select()} />
+          <CheckBox checked={invite.selected} onPress={() => select()} />
           <Text style={styles.cardText}>{friend}</Text>
         </View>
       </Card>
