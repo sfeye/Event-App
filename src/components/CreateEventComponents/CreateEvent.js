@@ -28,7 +28,7 @@ const CreateEvent = ({ route, navigation }) => {
 
   const resetState = () => {
     setLocation("");
-    setDate(new Date());
+    setDateTime(new Date());
     setDescription("");
     setFriends([]);
     setLoading(false);
