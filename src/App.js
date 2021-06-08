@@ -12,9 +12,9 @@ import CreateAccount from "./pages/CreateAccount";
 import Home from "./pages/Home";
 import Friends from "./components/FriendPageComponents/Friends";
 import Search from "./components/Search";
-import CreateEvent from "./components/CreateEvent";
+import CreateEvent from "./components/CreateEventComponents/CreateEvent";
 import Settings from "./components/Settings";
-import InviteFriends from "./components/InviteFriends";
+import InviteFriends from "./components/CreateEventComponents/InviteFriends";
 import ForgotPassword from "./components/ForgotPassword";
 
 export default function App() {
@@ -121,7 +121,7 @@ export default function App() {
               return (
                 <Ionicons
                   name={focused ? "add-circle" : "add-circle-outline"}
-                  size={size}
+                  size={30}
                   color={color}
                 />
               );

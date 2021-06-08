@@ -7,7 +7,8 @@ const EventCard = ({
   eventId,
   postedBy,
   location,
-  datetime,
+  date,
+  time,
   description,
   accepted,
   declined,
@@ -76,7 +77,9 @@ const EventCard = ({
 
       <Text style={styles.location}>Location: {location}</Text>
 
-      <Text style={styles.dateTime}>Date & Time: {datetime}</Text>
+      <Text style={styles.dateTime}>Date: {date}</Text>
+
+      <Text style={styles.dateTime}>Time: {time}</Text>
 
       <TouchableOpacity
         style={styles.invitedFriends}
