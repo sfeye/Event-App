@@ -15,7 +15,27 @@ const Home = ({ route, navigation }) => {
   // --- State ----------------- //
   const [eventCards, setEventCards] = useState(null);
   const [loading, setLoading] = useState(false);
-  var today = new Date();
+  // --------------------------- //
+
+  // --- Helpers --------------- //
+  function processDate(datetime) {
+    var temp = new Date(datetime.seconds * 1000);
+    return (
+      temp.getMonth() + 1 + "/" + temp.getDate() + "/" + temp.getFullYear()
+    );
+  }
+
+  function processTime(datetime) {
+    var temp = new Date(datetime.seconds * 1000);
+    return (
+      (temp.getHours() < 12 ? temp.getHours() : temp.getHours() - 12) +
+      ":" +
+      temp.getMinutes().toString().padEnd(2, "0") +
+      " " +
+      (temp.getHours() < 12 ? "AM" : "PM")
+    );
+  }
+
   // --------------------------- //
 
   // --- Read DB --------------- //
@@ -54,21 +74,24 @@ const Home = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
 
-          {eventCards
-            ? eventCards.map(({ id, eventCard }) => (
-                <EventCard
-                  key={id}
-                  username={route.params.user}
-                  eventId={id}
-                  postedBy={eventCard.email}
-                  location={eventCard.location}
-                  datetime={"time"}
-                  description={eventCard.description}
-                  accepted={eventCard.accepted}
-                  declined={eventCard.declined}
-                />
-              ))
-            : React.Fragment}
+          {eventCards ? (
+            eventCards.map(({ id, eventCard }) => (
+              <EventCard
+                key={id}
+                username={route.params.user}
+                eventId={id}
+                postedBy={eventCard.email}
+                location={eventCard.location}
+                date={processDate(eventCard.datetime)}
+                time={processTime(eventCard.datetime)}
+                description={eventCard.description}
+                accepted={eventCard.accepted}
+                declined={eventCard.declined}
+              />
+            ))
+          ) : (
+            <Text>There are no events displayed.</Text>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

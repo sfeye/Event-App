@@ -14,7 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 const CreateEvent = ({ route, navigation }) => {
   // --- State ----------------- //
   const [location, setLocation] = useState("");
-  const [datetime, setDate] = useState(new Date());
+  const [datetime, setDateTime] = useState(new Date());
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
   const [length, setLength] = useState(friends.length);
@@ -23,7 +23,7 @@ const CreateEvent = ({ route, navigation }) => {
 
   // --- Helpers --------------- //
   const onChangeDate = (event, selectedDate) => {
-    setDate(selectedDate);
+    setDateTime(selectedDate);
   };
 
   const resetState = () => {
@@ -37,7 +37,6 @@ const CreateEvent = ({ route, navigation }) => {
   const addFriend = (length, friendArr) => {
     setLength(length);
     setFriends(friendArr);
-    console.log(friends);
   };
   // --------------------------- //
 
@@ -53,7 +52,7 @@ const CreateEvent = ({ route, navigation }) => {
         email: route.params.user,
         // username: route.params.user.username,
         location: location,
-        date: datetime,
+        datetime: datetime,
         description: description,
         friends: friends,
         accepted: [],

@@ -34,14 +34,12 @@ const InviteFriends = ({ route, navigation }) => {
       var tempArr = selectedArr;
       tempArr.push(friendName);
       setSelectedArr(tempArr);
-      console.log("add: " + friendName);
     }
 
     if (selected && selectedArr.includes(friendName)) {
       var tempArr = selectedArr;
       tempArr = arrayRemove(tempArr, friendName);
       setSelectedArr(tempArr);
-      console.log("remove: " + friendName);
     }
   };
   // --------------------------- //
