@@ -17,6 +17,7 @@ const CreateEvent = ({ route, navigation }) => {
   const [datetime, setDate] = useState(new Date());
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
+  const [length, setLength] = useState(friends.length);
   const [loading, setLoading] = useState(false);
   // --------------------------- //
 
@@ -33,11 +34,11 @@ const CreateEvent = ({ route, navigation }) => {
     setLoading(false);
   };
 
-  const addFriend = (selectedFriends) => {
-    setFriends(selectedFriends);
+  const addFriend = (length, friendArr) => {
+    setLength(length);
+    setFriends(friendArr);
+    console.log(friends);
   };
-
-  useEffect(() => {}, [friends.length]);
   // --------------------------- //
 
   // --- Post to DB ------------ //
@@ -106,7 +107,7 @@ const CreateEvent = ({ route, navigation }) => {
             navigation.push("InviteFriends", {
               email: route.params.user,
               friends: friends,
-              addFriend: setFriends,
+              paramAddFriend: addFriend,
             })
           }
         >

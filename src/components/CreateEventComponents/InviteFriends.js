@@ -12,14 +12,14 @@ import firebase from "firebase";
 const InviteFriends = ({ route, navigation }) => {
   // --- State ----------------- //
   const [user, setUser] = useState(null);
-  const [selectedArr, setSelectedArr] = useState([]);
+  const [selectedArr, setSelectedArr] = useState(route.params.friends);
   const [loading, setLoading] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
 
   const confirm = () => {
-    route.params.addFriend(selectedArr);
+    route.params.paramAddFriend(selectedArr.length, selectedArr);
     navigation.goBack();
   };
 
@@ -29,15 +29,19 @@ const InviteFriends = ({ route, navigation }) => {
     });
   }
 
-  const addSelected = (invite) => {
-    if (!invite.selected) {
-      setSelectedArr([...selectedArr, invite.friend]);
+  const addSelected = (selected, friendName) => {
+    if (!selected) {
+      var tempArr = selectedArr;
+      tempArr.push(friendName);
+      setSelectedArr(tempArr);
+      console.log("add: " + friendName);
     }
 
-    if (invite.selected && selectedArr.includes(invite.friend)) {
+    if (selected && selectedArr.includes(friendName)) {
       var tempArr = selectedArr;
-      tempArr = arrayRemove(tempArr, invite.friend);
+      tempArr = arrayRemove(tempArr, friendName);
       setSelectedArr(tempArr);
+      console.log("remove: " + friendName);
     }
   };
   // --------------------------- //
