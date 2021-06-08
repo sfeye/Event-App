@@ -17,7 +17,6 @@ const InviteFriends = ({ route, navigation }) => {
   // --------------------------- //
 
   // --- Helpers --------------- //
-
   const confirm = () => {
     route.params.paramAddFriend(selectedArr.length, selectedArr);
     navigation.goBack();

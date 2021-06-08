@@ -28,14 +28,35 @@ const Home = ({ route, navigation }) => {
   function processTime(datetime) {
     var temp = new Date(datetime.seconds * 1000);
     return (
-      (temp.getHours() < 12 ? temp.getHours() : temp.getHours() - 12) +
+      processHour(temp.getHours()) +
       ":" +
       temp.getMinutes().toString().padEnd(2, "0") +
       " " +
-      (temp.getHours() < 12 ? "AM" : "PM")
+      processAMPM(temp.getHours())
     );
   }
 
+  function processHour(hour) {
+    if (hour === "24") {
+      return "12";
+    } else if (hour < 13) {
+      return hour;
+    } else {
+      return hour - 12;
+    }
+  }
+
+  function processAMPM(hour) {
+    if (hour === 12) {
+      return "PM";
+    } else if (hour === 24) {
+      return "AM";
+    } else if (hour < 13) {
+      return "AM";
+    } else {
+      return "PM";
+    }
+  }
   // --------------------------- //
 
   // --- Read DB --------------- //
