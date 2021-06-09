@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import firebase from "firebase";
 
@@ -75,64 +77,69 @@ const CreateAccount = ({ navigation }) => {
   // --------------------------- //
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Full Name"
-          value={name}
-          placeholderTextColor="#003f5c"
-          onChangeText={setName}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Email..."
-          value={email}
-          placeholderTextColor="#003f5c"
-          onChangeText={setEmail}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          secureTextEntry
-          style={styles.inputText}
-          placeholder="Password"
-          value={password}
-          placeholderTextColor="#003f5c"
-          onChangeText={setPassword}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Phone Number"
-          value={phoneNumber}
-          placeholderTextColor="#003f5c"
-          keyboardType="numeric"
-          onChangeText={setPhoneNumber}
-        />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Full Name"
+            value={name}
+            placeholderTextColor="#003f5c"
+            onChangeText={setName}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Email..."
+            value={email}
+            placeholderTextColor="#003f5c"
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            secureTextEntry
+            style={styles.inputText}
+            placeholder="Password"
+            value={password}
+            placeholderTextColor="#003f5c"
+            onChangeText={setPassword}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Phone Number"
+            value={phoneNumber}
+            placeholderTextColor="#003f5c"
+            keyboardType="numeric"
+            onChangeText={setPhoneNumber}
+          />
+        </View>
 
-      <TouchableOpacity style={styles.signup} onPress={() => signUpWithEmail()}>
-        {loading ? (
-          <ActivityIndicator color="#fff" size="large" />
-        ) : (
-          <Text style={styles.signuptext}>Create Account</Text>
-        )}
-      </TouchableOpacity>
-      <Text
-        style={{
-          fontSize: 10,
-          textAlign: "center",
-          color: "red",
-          width: "50%",
-        }}
-      >
-        {errorMessage}
-      </Text>
-    </View>
+        <TouchableOpacity
+          style={styles.signup}
+          onPress={() => signUpWithEmail()}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" size="large" />
+          ) : (
+            <Text style={styles.signuptext}>Create Account</Text>
+          )}
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 10,
+            textAlign: "center",
+            color: "red",
+            width: "50%",
+          }}
+        >
+          {errorMessage}
+        </Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

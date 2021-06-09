@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
 
@@ -19,37 +26,39 @@ const ForgotPassword = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formContainer}>
-        <View style={styles.resetPwdWord}>
-          <Text style={{ fontSize: 28, height: 50 }}>Reset Password!</Text>
-        </View>
-        <View style={styles.subContainer}>
-          <Input
-            style={styles.textInput}
-            placeholder="Email.."
-            leftIcon={<Icon name="mail" size={24} />}
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
-        <View style={styles.subContainer}>
-          <Button
-            style={styles.textInput}
-            icon={<Icon name="input" size={15} color="white" />}
-            title="Reset"
-            onPress={() => reset()}
-          />
-        </View>
-        {showLoading ? (
-          <View style={styles.activity}>
-            <ActivityIndicator size="large" color="#0000ff" />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <View style={styles.formContainer}>
+          <View style={styles.resetPwdWord}>
+            <Text style={{ fontSize: 28, height: 50 }}>Reset Password!</Text>
           </View>
-        ) : (
-          <React.Fragment />
-        )}
+          <View style={styles.subContainer}>
+            <Input
+              style={styles.textInput}
+              placeholder="Email..."
+              leftIcon={<Icon name="mail" size={24} />}
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
+          <View style={styles.subContainer}>
+            <Button
+              style={styles.textInput}
+              icon={<Icon name="input" size={15} color="white" />}
+              title="Reset"
+              onPress={() => reset()}
+            />
+          </View>
+          {showLoading ? (
+            <View style={styles.activity}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <React.Fragment />
+          )}
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
