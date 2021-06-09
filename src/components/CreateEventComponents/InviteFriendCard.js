@@ -27,8 +27,8 @@ const InviteFriendCard = ({ friend, invitedFriends, addSelected }) => {
     <View>
       <Card style={styles.alreadyInvited}>
         <View style={styles.card}>
-          <CheckBox checked={selected} onPress={() => select(friend)} />
           <Text style={styles.cardText}>{friend}</Text>
+          <CheckBox checked={selected} onPress={() => select(friend)} />
         </View>
       </Card>
     </View>

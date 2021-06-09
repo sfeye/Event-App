@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import firebase from "firebase";
 import EventCard from "../components/EventCard";
@@ -18,6 +19,22 @@ const Home = ({ route, navigation }) => {
   // --------------------------- //
 
   // --- Helpers --------------- //
+  function isPostedByCurrentUser(postedBy) {
+    if (postedBy === route.params.user) {
+      return true;
+    }
+    return false;
+  }
+  function isCurrentUserInvited(invitedFriends, postedBy) {
+    if (
+      invitedFriends.includes(route.params.user) ||
+      isPostedByCurrentUser(postedBy)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   function processDate(datetime) {
     var temp = new Date(datetime.seconds * 1000);
     return (
@@ -101,22 +118,27 @@ const Home = ({ route, navigation }) => {
           </View>
 
           {eventCards ? (
-            eventCards.map(({ id, eventCard }) => (
-              <EventCard
-                key={id}
-                username={route.params.user}
-                eventId={id}
-                postedBy={eventCard.email}
-                location={eventCard.location}
-                date={processDate(eventCard.datetime)}
-                time={processTime(eventCard.datetime)}
-                description={eventCard.description}
-                accepted={eventCard.accepted}
-                declined={eventCard.declined}
-              />
-            ))
+            eventCards.map(({ id, eventCard }) =>
+              isCurrentUserInvited(eventCard.friends, eventCard.email) ? (
+                <EventCard
+                  key={id}
+                  username={route.params.user}
+                  eventId={id}
+                  postedBy={eventCard.email}
+                  location={eventCard.location}
+                  date={processDate(eventCard.datetime)}
+                  time={processTime(eventCard.datetime)}
+                  description={eventCard.description}
+                  accepted={eventCard.accepted}
+                  declined={eventCard.declined}
+                  isPostedBy={isPostedByCurrentUser(eventCard.email)}
+                />
+              ) : (
+                <React.Fragment />
+              )
+            )
           ) : (
-            <Text>There are no events displayed.</Text>
+            <ActivityIndicator color="black" size="large" />
           )}
         </View>
       </ScrollView>

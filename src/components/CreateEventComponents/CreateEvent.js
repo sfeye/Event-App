@@ -121,6 +121,13 @@ const CreateEvent = ({ route, navigation }) => {
         >
           <Text style={styles.createTxt}>Create Event</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.createBtn}
+          onPress={() => resetState()}
+          disabled={loading}
+        >
+          <Text style={styles.createTxt}>Reset</Text>
+        </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );

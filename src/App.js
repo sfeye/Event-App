@@ -13,9 +13,10 @@ import Home from "./pages/Home";
 import Friends from "./components/FriendPageComponents/Friends";
 import Search from "./components/Search";
 import CreateEvent from "./components/CreateEventComponents/CreateEvent";
-import Settings from "./components/Settings";
+import Settings from "./components/SettingsPageComponents/Settings";
 import InviteFriends from "./components/CreateEventComponents/InviteFriends";
 import ForgotPassword from "./components/ForgotPassword";
+import EditFriends from "./components/SettingsPageComponents/EditFriends";
 
 export default function App() {
   // --- Initialize Firebase --- //
@@ -82,7 +83,13 @@ export default function App() {
       <SettingStack.Screen
         name="ProfileSettings"
         component={Settings}
-        options={{ title: "Profile Settings" }}
+        options={{ title: "Profile" }}
+        initialParams={{ user: authUser.email }}
+      />
+      <SettingStack.Screen
+        name="EditFriends"
+        component={EditFriends}
+        options={{ title: "Edit Friends" }}
       />
     </SettingStack.Navigator>
   );
