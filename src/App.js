@@ -16,6 +16,7 @@ import CreateEvent from "./components/CreateEvent";
 import Settings from "./components/Settings";
 import InviteFriends from "./components/InviteFriends";
 import ForgotPassword from "./components/ForgotPassword";
+import AddNewFriends from "./components/AddNewFriends";
 
 export default function App() {
   // --- Initialize Firebase --- //
@@ -73,6 +74,11 @@ export default function App() {
         component={Friends}
         options={{ title: "Your Friends" }}
         initialParams={{ user: authUser.email }}
+      />
+      <FriendStack.Screen
+        name="AddNewFriends"
+        component={AddNewFriends}
+        options={{ title: "Add Friends" }}
       />
     </FriendStack.Navigator>
   );

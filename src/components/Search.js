@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SnapshotViewIOSBase } from "react-native";
+import { View } from "react-native";
 import { SearchBar } from "react-native-elements";
 import SearchResults from "./SearchResults";
 import firebase from "firebase";
