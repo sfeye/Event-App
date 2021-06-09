@@ -13,6 +13,7 @@ const EventCard = ({
   description,
   accepted,
   declined,
+  isPostedBy,
 }) => {
   const active1 = accepted.includes(username.toString());
   const active2 = declined.includes(username.toString());
@@ -88,9 +89,13 @@ const EventCard = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
-        <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
-          <Ionicons name={"trash"} size={20} color={"red"} />
-        </TouchableOpacity>
+        {isPostedBy ? (
+          <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
+            <Ionicons name={"trash"} size={20} color={"red"} />
+          </TouchableOpacity>
+        ) : (
+          <React.Fragment />
+        )}
       </View>
 
       <Text style={styles.description}>Description: {description}</Text>
