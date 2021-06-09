@@ -51,6 +51,7 @@ const AddFriendResults = ({ currentUser, otherUsers }) => {
               <Text>{otherUser.friend.name}</Text>
               <Button
                 transparent
+                title="Add"
                 disabled={isAlreadyFriend(
                   currentUser.friend.friends,
                   otherUser.friend.email
@@ -65,9 +66,7 @@ const AddFriendResults = ({ currentUser, otherUsers }) => {
                     currentUser.friend.friends
                   )
                 }
-              >
-                <Text>Add Friend</Text>
-              </Button>
+              ></Button>
             </View>
           ))
         : React.Fragment}
