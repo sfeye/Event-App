@@ -57,8 +57,8 @@ const EditFriends = ({ route, navigation }) => {
     <View>
       {route.params.friends ? (
         route.params.friends.map((friend) => (
-          <Card>
-            <View key={friend} style={styles.cardContainer}>
+          <Card key={friend}>
+            <View style={styles.cardContainer}>
               <Text>{friend}</Text>
               <TouchableOpacity
                 onPress={() => submit(friend)}
