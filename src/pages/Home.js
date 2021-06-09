@@ -61,9 +61,14 @@ const Home = ({ route, navigation }) => {
 
   // --- Read DB --------------- //
   useEffect(() => {
+    const today = new Date();
+    today.setHours(0);
+
     const unsubscribe = firebase
       .firestore()
       .collection("events")
+      .where("datetime", ">=", today)
+      .orderBy("datetime", "asc")
       .onSnapshot((snapshot) => {
         setEventCards(
           snapshot.docs.map((doc) => ({

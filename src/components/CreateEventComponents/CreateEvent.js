@@ -5,8 +5,8 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  InputAccessoryView,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import firebase from "firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -61,6 +61,7 @@ const CreateEvent = ({ route, navigation }) => {
       .then(() => {
         alert("Event added!");
         resetState();
+        navigation.navigate("Home");
       })
       .catch((error) => {
         alert(error);
@@ -69,7 +70,7 @@ const CreateEvent = ({ route, navigation }) => {
   // --------------------------- //
 
   return (
-    <ScrollView style={styles.scrollView} keyboardDismissMode="interactive">
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text style={styles.title}>
           Hi {route.params.user}, let's create an event!
@@ -121,7 +122,7 @@ const CreateEvent = ({ route, navigation }) => {
           <Text style={styles.createTxt}>Create Event</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 

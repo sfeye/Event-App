@@ -7,7 +7,8 @@ import {
   ActivityIndicator,
   Image,
   TextInput,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import firebase from "firebase";
 
@@ -47,53 +48,54 @@ const Login = ({ navigation }) => {
   // --------------------------- //
 
   return (
-    // <ScrollView style={styles.scrollView} keyboardDismissMode="interactive">
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Image style={styles.logo} source={require("../assets/logo.png")} />
 
-    <View style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/logo.png")} />
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Email..."
+            value={email}
+            placeholderTextColor="#003f5c"
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            secureTextEntry
+            style={styles.inputText}
+            placeholder="Password"
+            value={password}
+            placeholderTextColor="#003f5c"
+            onChangeText={setPassword}
+          />
+        </View>
 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Email..."
-          value={email}
-          placeholderTextColor="#003f5c"
-          onChangeText={setEmail}
-        />
+        <TouchableOpacity onPress={() => navigation.push("ForgotPassword")}>
+          <Text style={styles.forgot}>Forgot password?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.signin}
+          onPress={() => signInWithEmail()}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" size="large" />
+          ) : (
+            <Text style={styles.signintext}>Sign In</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.signup}
+          title="Sign Up"
+          onPress={() => navigation.push("CreateAccount")}
+        >
+          <Text style={styles.signuptext}>Sign Up</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          secureTextEntry
-          style={styles.inputText}
-          placeholder="Password"
-          value={password}
-          placeholderTextColor="#003f5c"
-          onChangeText={setPassword}
-        />
-      </View>
-
-      <TouchableOpacity onPress={() => navigation.push("ForgotPassword")}>
-        <Text style={styles.forgot}>Forgot password?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.signin} onPress={() => signInWithEmail()}>
-        {loading ? (
-          <ActivityIndicator color="#fff" size="large" />
-        ) : (
-          <Text style={styles.signintext}>Sign In</Text>
-        )}
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.signup}
-        title="Sign Up"
-        onPress={() => navigation.push("CreateAccount")}
-      >
-        <Text style={styles.signuptext}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
-
-    //</ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 

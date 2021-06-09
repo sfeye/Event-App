@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SnapshotViewIOSBase } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 import { SearchBar } from "react-native-elements";
 import SearchResults from "./SearchResults";
 import firebase from "firebase";
@@ -39,19 +45,30 @@ const Search = ({ navigation }) => {
   }, []);
 
   return (
-    <View>
-      <SearchBar
-        placeholder="Search events.."
-        onChangeText={setSearchText}
-        value={searchText}
-      />
-      {events ? (
-        events.map(({ id, event }) => filterEvents(id, event, searchText))
-      ) : (
-        <React.Fragment />
-      )}
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+      <View style={styles.container}>
+        <SearchBar
+          placeholder="Search events.."
+          onChangeText={setSearchText}
+          value={searchText}
+        />
+        <ScrollView>
+          {events ? (
+            events.map(({ id, event }) => filterEvents(id, event, searchText))
+          ) : (
+            <React.Fragment />
+          )}
+        </ScrollView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: "100%",
+  },
+});
 
 export default Search;
