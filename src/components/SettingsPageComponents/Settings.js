@@ -10,9 +10,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Card, Avatar } from "react-native-elements";
+import { Avatar } from "react-native-elements";
 import firebase from "firebase";
-import { NavigationEvents } from "react-navigation";
 
 const Settings = ({ route, navigation }) => {
   // --- State ----------------- //
@@ -51,12 +50,12 @@ const Settings = ({ route, navigation }) => {
     setPhoneEdit(!phoneEdit);
   };
 
-  function updateFriends(id, friendArr, removedFriend) {
+  const updateFriends = (id, friendArr, removedFriend) => {
     var temp = arrayRemove(friendArr, removedFriend);
     firebase.firestore().collection("users").doc(id).update({
       friends: temp,
     });
-  }
+  };
   // --------------------------- //
 
   // --- Read DB --------------- //
@@ -177,6 +176,7 @@ const Settings = ({ route, navigation }) => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.push("EditFriends", {
+                      currentUser: info.email,
                       friends: info.friends,
                       id: id,
                       removeFriend: updateFriends,

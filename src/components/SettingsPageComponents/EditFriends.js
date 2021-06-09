@@ -1,15 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { Card, Avatar } from "react-native-elements";
+import { Card } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import firebase from "firebase";
 
 const EditFriends = ({ route, navigation }) => {
+  // --- State ----------------- //
+  const [docs, setDocs] = useState([]);
+  // --------------------------- //
+
   // --- Helpers --------------- //
   const submit = (friend) => {
+    var docIndex = loopThroughDocs(friend);
     alert("but he was such a nice guy... 😢");
+
     route.params.removeFriend(route.params.id, route.params.friends, friend);
+    if (docIndex !== -1) {
+      route.params.removeFriend(
+        docs[docIndex].id,
+        docs[docIndex].info.friends,
+        route.params.currentUser
+      );
+    }
     navigation.goBack();
   };
+
+  function loopThroughDocs(friend) {
+    for (var i = 0; i < docs.length; i++) {
+      if (docs[i].info.email === friend) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  // --------------------------- //
+
+  // --- Read DB --------------- //
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("users")
+      .onSnapshot((snapshot) => {
+        setDocs(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            info: doc.data(),
+          }))
+        );
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   // --------------------------- //
   return (
     <View>
