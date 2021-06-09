@@ -16,6 +16,7 @@ import CreateEvent from "./components/CreateEventComponents/CreateEvent";
 import Settings from "./components/SettingsPageComponents/Settings";
 import InviteFriends from "./components/CreateEventComponents/InviteFriends";
 import ForgotPassword from "./components/ForgotPassword";
+import AddNewFriends from "./components/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
 
 export default function App() {
@@ -74,6 +75,11 @@ export default function App() {
         component={Friends}
         options={{ title: "Your Friends" }}
         initialParams={{ user: authUser.email }}
+      />
+      <FriendStack.Screen
+        name="AddNewFriends"
+        component={AddNewFriends}
+        options={{ title: "Add Friends" }}
       />
     </FriendStack.Navigator>
   );

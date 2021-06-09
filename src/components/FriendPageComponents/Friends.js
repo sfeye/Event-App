@@ -53,6 +53,18 @@ const Friends = ({ route, navigation }) => {
               )
             : React.Fragment}
         </View>
+        <View style={styles.subContainer}>
+          <Button
+            style={styles.textInput}
+            icon={<Icon name="input" size={15} color="white" />}
+            title="Add Friends"
+            onPress={() =>
+              navigation.push("AddNewFriends", {
+                currentUser: route.params.user,
+              })
+            }
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -83,6 +95,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  textInput: {
+    fontSize: 18,
+    margin: 5,
+    width: 200,
+  },
+  subContainer: {
+    marginBottom: 20,
+    padding: 5,
   },
 });
 
