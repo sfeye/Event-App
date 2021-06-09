@@ -1,18 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-  Right,
-  Button,
-} from "native-base";
+import { View, Text, Button } from "react-native";
 import firebase from "firebase";
 
 const AddFriendResults = ({ currentUser, otherUsers }) => {
