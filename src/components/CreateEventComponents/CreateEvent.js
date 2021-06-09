@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  InputAccessoryView,
-  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import firebase from "firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -14,23 +14,29 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 const CreateEvent = ({ route, navigation }) => {
   // --- State ----------------- //
   const [location, setLocation] = useState("");
-  const [datetime, setDate] = useState(new Date());
+  const [datetime, setDateTime] = useState(new Date());
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
+  const [length, setLength] = useState(friends.length);
   const [loading, setLoading] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
   const onChangeDate = (event, selectedDate) => {
-    setDate(selectedDate);
+    setDateTime(selectedDate);
   };
 
   const resetState = () => {
     setLocation("");
-    setDate(new Date());
+    setDateTime(new Date());
     setDescription("");
     setFriends([]);
     setLoading(false);
+  };
+
+  const addFriend = (length, friendArr) => {
+    setLength(length);
+    setFriends(friendArr);
   };
   // --------------------------- //
 
@@ -46,7 +52,7 @@ const CreateEvent = ({ route, navigation }) => {
         email: route.params.user,
         // username: route.params.user.username,
         location: location,
-        date: datetime,
+        datetime: datetime,
         description: description,
         friends: friends,
         accepted: [],
@@ -55,6 +61,7 @@ const CreateEvent = ({ route, navigation }) => {
       .then(() => {
         alert("Event added!");
         resetState();
+        navigation.navigate("Home");
       })
       .catch((error) => {
         alert(error);
@@ -63,7 +70,7 @@ const CreateEvent = ({ route, navigation }) => {
   // --------------------------- //
 
   return (
-    <ScrollView style={styles.scrollView} keyboardDismissMode="interactive">
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text style={styles.title}>
           Hi {route.params.user}, let's create an event!
@@ -96,7 +103,13 @@ const CreateEvent = ({ route, navigation }) => {
 
         <TouchableOpacity
           style={styles.inviteFriends}
-          onPress={() => navigation.push("InviteFriends")}
+          onPress={() =>
+            navigation.push("InviteFriends", {
+              email: route.params.user,
+              friends: friends,
+              paramAddFriend: addFriend,
+            })
+          }
         >
           <Text>+Friends {friends.length}</Text>
         </TouchableOpacity>
@@ -108,8 +121,15 @@ const CreateEvent = ({ route, navigation }) => {
         >
           <Text style={styles.createTxt}>Create Event</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.createBtn}
+          onPress={() => resetState()}
+          disabled={loading}
+        >
+          <Text style={styles.createTxt}>Reset</Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
