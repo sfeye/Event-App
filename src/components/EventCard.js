@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 
 const EventCard = ({
@@ -67,11 +68,30 @@ const EventCard = ({
 
     setLoading(false);
   };
+
+  const deleteEvent = () => {
+    firebase
+      .firestore()
+      .collection("events")
+      .doc(eventId)
+      .delete()
+      .then(() => {
+        alert("Success!");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
   // --------------------------- //
 
   return (
     <View style={styles.container}>
-      <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
+      <View style={styles.header}>
+        <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
+        <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
+          <Ionicons name={"trash"} size={20} color={"red"} />
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.description}>Description: {description}</Text>
 
@@ -121,6 +141,11 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginTop: 10,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   invitedFriends: {
     borderRadius: 20,
