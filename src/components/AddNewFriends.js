@@ -4,16 +4,25 @@ import firebase from "firebase";
 import { SearchBar } from "react-native-elements";
 import AddFriendResults from "./AddFriendResults";
 
-//filter friends to match input
-
 const AddNewFriends = ({ route, navigation }) => {
-  const [inputText, setInputText] = useState(" ");
+  const [inputText, setInputText] = useState("");
   const [friends, setFriends] = useState(null);
 
-  function filterUsers(friends) {
+  function filterUsers(friends, searchText) {
     var tempArr = [];
     for (var i = 0; i < friends.length; i++) {
-      if (friends[i].friend.email !== route.params.currentUser) {
+      if (
+        friends[i].friend.email !== route.params.currentUser &&
+        (friends[i].friend.email
+          .toLowerCase()
+          .includes(searchText.toLowerCase()) ||
+          friends[i].friend.name
+            .toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          friends[i].friend.phone
+            .toLowerCase()
+            .includes(searchText.toLowerCase()))
+      ) {
         tempArr.push(friends[i]);
       }
     }
@@ -53,10 +62,10 @@ const AddNewFriends = ({ route, navigation }) => {
         onChangeText={setInputText}
         value={inputText}
       />
-      {friends ? (
+      {friends && inputText ? (
         <AddFriendResults
           currentUser={getCurrUser(friends)}
-          otherUsers={filterUsers(friends)}
+          otherUsers={filterUsers(friends, inputText)}
         />
       ) : (
         React.Fragment

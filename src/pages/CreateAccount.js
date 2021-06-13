@@ -43,6 +43,7 @@ const CreateAccount = ({ navigation }) => {
         friends: [],
         name: name,
         phone: phoneNumber,
+        pending: [],
       })
       .then(() => {
         alert("Success");
