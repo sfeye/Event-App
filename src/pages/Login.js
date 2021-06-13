@@ -18,6 +18,8 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [touchedEmail, setTouchedEmail] = useState(false);
+  const [touchedPassword, setTouchedPassword] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -44,10 +46,6 @@ const Login = ({ navigation }) => {
   };
   // --------------------------- //
 
-  // --- Sign In Open Form ----- //
-  // Card ID: COMP-3
-  // --------------------------- //
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
@@ -60,7 +58,8 @@ const Login = ({ navigation }) => {
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
-            errorMessage={validate("email", email)}
+            errorMessage={touchedEmail ? validate("email", email) : ""}
+            onFocus={() => setTouchedEmail(true)}
           />
         </View>
         <View style={styles.inputView}>
@@ -71,7 +70,8 @@ const Login = ({ navigation }) => {
             value={password}
             placeholderTextColor="#003f5c"
             onChangeText={setPassword}
-            errorMessage={validate("password", password)}
+            errorMessage={touchedPassword ? validate("password", password) : ""}
+            onFocus={() => setTouchedPassword(true)}
           />
         </View>
 
@@ -103,10 +103,15 @@ const Login = ({ navigation }) => {
 };
 
 const validate = (name, value) => {
+  const regex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   switch (name) {
     case "email":
       if (value === "") {
         return "An email is required";
+      } else if (!regex.test(String(value).toLowerCase())) {
+        return "Invalid email address";
       }
       break;
     case "password":
@@ -115,7 +120,6 @@ const validate = (name, value) => {
       }
       break;
   }
-
   return "";
 };
 

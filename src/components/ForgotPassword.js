@@ -13,6 +13,7 @@ import firebase from "firebase";
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [showLoading, setShowLoading] = useState(false);
+  const [touched, setTouched] = useState(false);
 
   const reset = () => {
     setShowLoading(true);
@@ -35,11 +36,12 @@ const ForgotPassword = ({ navigation }) => {
           <View style={styles.subContainer}>
             <Input
               style={styles.textInput}
-              placeholder="Email..."
+              placeholder="Email"
               leftIcon={<Icon name="mail" size={24} />}
               value={email}
               onChangeText={setEmail}
-              errorMessage={validate(email)}
+              onFocus={() => setTouched(true)}
+              errorMessage={touched ? validate(email) : ""}
             />
           </View>
           <View style={styles.subContainer}>
@@ -64,30 +66,33 @@ const ForgotPassword = ({ navigation }) => {
 };
 
 const validate = (email) => {
+  const regexEmail =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   if (email === "") {
     return "An email is required";
+  } else if (!regexEmail.test(String(email).toLowerCase())) {
+    return "Invalid email address";
   }
+
   return "";
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    paddingTop: "10%",
   },
   formContainer: {
+    alignItems: "center",
     height: 400,
     padding: 20,
   },
-  resetPwdWord: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   subContainer: {
-    marginBottom: 20,
     padding: 5,
+    marginTop: 30,
+    width: 300,
   },
   activity: {
     position: "absolute",
@@ -100,8 +105,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 18,
-    margin: 5,
-    width: 200,
   },
 });
 

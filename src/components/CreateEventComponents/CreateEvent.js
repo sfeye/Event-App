@@ -21,6 +21,8 @@ const CreateEvent = ({ route, navigation }) => {
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [touchedDescription, setTouchedDescription] = useState(false);
+  const [touchedLocation, setTouchedLocation] = useState(false);
   const [open, setOpen] = useState(false);
   // --------------------------- //
 
@@ -56,11 +58,29 @@ const CreateEvent = ({ route, navigation }) => {
       setFriends(tempArr);
     }
   };
+
+  const isDisabled = () => {
+    return (
+      validate("description", description) !== "" ||
+      validate("location", location) !== ""
+    );
+  };
   // --------------------------- //
 
   // --- Post to DB ------------ //
   const createEvent = () => {
     setLoading(true);
+
+    if (friends.length === 0) {
+      alert("You have not selected any friends...");
+      setLoading(false);
+      return;
+    }
+    if (datetime <= new Date()) {
+      alert("Please select a date and time in the future...");
+      setLoading(false);
+      return;
+    }
 
     firebase
       .firestore()
@@ -144,7 +164,10 @@ const CreateEvent = ({ route, navigation }) => {
           onChangeText={setDescription}
           placeholder="Name or description"
           value={description}
-          errorMessage={validate("description", description)}
+          onFocus={() => setTouchedDescription(true)}
+          errorMessage={
+            touchedDescription ? validate("description", description) : ""
+          }
         />
 
         <Input
@@ -152,7 +175,8 @@ const CreateEvent = ({ route, navigation }) => {
           onChangeText={setLocation}
           placeholder="Location"
           value={location}
-          errorMessage={validate("location", location)}
+          onFocus={() => setTouchedLocation(true)}
+          errorMessage={touchedLocation ? validate("location", location) : ""}
         />
 
         <View style={styles.datePickers}>
@@ -173,20 +197,20 @@ const CreateEvent = ({ route, navigation }) => {
           <Text>+Friends {friends.length}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        <Button
           style={styles.createBtn}
+          icon={<Icon name="input" size={15} color="white" />}
+          title="Create Event"
           onPress={() => createEvent()}
-          disabled={loading}
-        >
-          <Text style={styles.createTxt}>Create Event</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          disabled={loading || isDisabled()}
+        />
+        <Button
           style={styles.createBtn}
+          icon={<Icon name="input" size={15} color="white" />}
+          title="Reset"
           onPress={() => resetState()}
           disabled={loading}
-        >
-          <Text style={styles.createTxt}>Reset</Text>
-        </TouchableOpacity>
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -242,10 +266,8 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   createBtn: {
-    backgroundColor: "#ececec",
     padding: 10,
     borderRadius: 10,
-    marginTop: 10,
     alignSelf: "center",
     width: "60%",
   },
