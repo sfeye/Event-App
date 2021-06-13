@@ -39,6 +39,7 @@ const ForgotPassword = ({ navigation }) => {
               leftIcon={<Icon name="mail" size={24} />}
               value={email}
               onChangeText={setEmail}
+              errorMessage={validate(email)}
             />
           </View>
           <View style={styles.subContainer}>
@@ -60,6 +61,13 @@ const ForgotPassword = ({ navigation }) => {
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const validate = (email) => {
+  if (email === "") {
+    return "An email is required";
+  }
+  return "";
 };
 
 const styles = StyleSheet.create({

@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
 
 const Login = ({ navigation }) => {
@@ -53,22 +54,24 @@ const Login = ({ navigation }) => {
         <Image style={styles.logo} source={require("../assets/logo.png")} />
 
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Email..."
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
+            errorMessage={validate("email", email)}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
             value={password}
             placeholderTextColor="#003f5c"
             onChangeText={setPassword}
+            errorMessage={validate("password", password)}
           />
         </View>
 
@@ -97,6 +100,23 @@ const Login = ({ navigation }) => {
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const validate = (name, value) => {
+  switch (name) {
+    case "email":
+      if (value === "") {
+        return "An email is required";
+      }
+      break;
+    case "password":
+      if (value === "") {
+        return "A password is required";
+      }
+      break;
+  }
+
+  return "";
 };
 
 const styles = StyleSheet.create({

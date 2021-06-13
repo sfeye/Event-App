@@ -4,10 +4,10 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
 
 const CreateAccount = ({ navigation }) => {
@@ -80,41 +80,45 @@ const CreateAccount = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
             placeholderTextColor="#003f5c"
             onChangeText={setName}
+            errorMessage={validate("name", name)}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
-            placeholder="Email..."
+            placeholder="Email"
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
+            errorMessage={validate("email", email)}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
             value={password}
             placeholderTextColor="#003f5c"
             onChangeText={setPassword}
+            errorMessage={validate("password", password)}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}
             placeholderTextColor="#003f5c"
             keyboardType="numeric"
             onChangeText={setPhoneNumber}
+            errorMessage={validate("phone", phoneNumber)}
           />
         </View>
 
@@ -141,6 +145,33 @@ const CreateAccount = ({ navigation }) => {
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const validate = (name, value) => {
+  switch (name) {
+    case "name":
+      if (value === "") {
+        return "A name is required";
+      }
+      break;
+    case "email":
+      if (value === "") {
+        return "An email is required";
+      }
+      break;
+    case "password":
+      if (value === "") {
+        return "A password is required";
+      }
+      break;
+    case "phone":
+      if (value === "") {
+        return "A phone number is required";
+      }
+      break;
+  }
+
+  return "";
 };
 
 const styles = StyleSheet.create({
