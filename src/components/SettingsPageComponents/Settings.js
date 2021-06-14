@@ -3,14 +3,13 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar } from "react-native-elements";
+import { Avatar, Input } from "react-native-elements";
 import firebase from "firebase";
 
 const Settings = ({ route, navigation }) => {
@@ -20,6 +19,8 @@ const Settings = ({ route, navigation }) => {
   const [phoneEdit, setPhoneEdit] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [phoneInput, setPhoneInput] = useState("");
+  const [touchedUser, setTouchedUser] = useState(false);
+  const [touchedPhone, setTouchedPhone] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -32,6 +33,14 @@ const Settings = ({ route, navigation }) => {
     return arr.filter(function (ele) {
       return ele != value;
     });
+  }
+
+  function isDisabledName() {
+    return validate("name", userInput) !== "";
+  }
+
+  function isDisabledPhone() {
+    return validate("phone", phoneInput) !== "";
   }
   // --------------------------- //
 
@@ -97,21 +106,26 @@ const Settings = ({ route, navigation }) => {
                 </View>
                 {userEdit ? (
                   <View style={styles.infoEditable}>
-                    <TextInput
+                    <Input
                       style={styles.input}
                       placeholder={info.name}
                       value={userInput}
                       onChangeText={setUserInput}
+                      onFocus={() => setTouchedUser(true)}
+                      errorMessage={
+                        touchedUser ? validate("name", userInput) : ""
+                      }
                       placeholderTextColor="red"
                     />
                     <TouchableOpacity
                       onPress={() => updateNameField(id, userInput)}
                       style={styles.acceptBtn}
+                      disabled={isDisabledName()}
                     >
                       <Ionicons
                         name={"checkmark-circle"}
                         size={30}
-                        color={"green"}
+                        color={isDisabledName() ? "gray" : "green"}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -135,21 +149,26 @@ const Settings = ({ route, navigation }) => {
                 )}
                 {phoneEdit ? (
                   <View style={styles.infoEditable}>
-                    <TextInput
+                    <Input
                       style={styles.input}
                       placeholder={info.phone}
                       value={phoneInput}
                       onChangeText={setPhoneInput}
+                      onFocus={() => setTouchedPhone(true)}
+                      errorMessage={
+                        touchedPhone ? validate("phone", phoneInput) : ""
+                      }
                       placeholderTextColor="red"
                     />
                     <TouchableOpacity
                       onPress={() => updatePhoneField(id, phoneInput)}
                       style={styles.acceptBtn}
+                      disabled={isDisabledPhone()}
                     >
                       <Ionicons
                         name={"checkmark-circle"}
                         size={30}
-                        color={"green"}
+                        color={isDisabledPhone() ? "gray" : "green"}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -203,6 +222,30 @@ const Settings = ({ route, navigation }) => {
   );
 };
 
+const validate = (name, value) => {
+  const regexPhone = /^(\()?[2-9]{1}\d{2}(\))?(-|\s)?[2-9]{1}\d{2}(-|\s)\d{4}$/;
+
+  switch (name) {
+    case "name":
+      if (value === "") {
+        return "A name is required";
+      } else if (value.length < 3) {
+        return "Name must be more than 3 characters";
+      } else if (!String(value).includes(" ")) {
+        return "Please enter a first and last name";
+      }
+      break;
+    case "phone":
+      if (value === "") {
+        return "A phone number is required";
+      } else if (!regexPhone.test(String(value).toLowerCase())) {
+        return "Invalid phone number format";
+      }
+      break;
+  }
+  return "";
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -214,7 +257,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     alignSelf: "center",
     marginTop: 20,
-    width: "90%",
+    width: "70%",
   },
   infoEmail: {
     fontSize: 25,
@@ -245,7 +288,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
     padding: 10,
-    backgroundColor: "white",
     borderRadius: 10,
     marginRight: 20,
   },

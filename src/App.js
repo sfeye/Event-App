@@ -14,7 +14,6 @@ import Friends from "./components/FriendPageComponents/Friends";
 import Search from "./components/Search";
 import CreateEvent from "./components/CreateEventComponents/CreateEvent";
 import Settings from "./components/SettingsPageComponents/Settings";
-import InviteFriends from "./components/CreateEventComponents/InviteFriends";
 import ForgotPassword from "./components/ForgotPassword";
 import AddNewFriends from "./components/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
@@ -49,11 +48,6 @@ export default function App() {
         component={CreateEvent}
         options={{ title: "Create Event" }}
         initialParams={{ user: authUser.email }}
-      />
-      <CreateEventStack.Screen
-        name="InviteFriends"
-        component={InviteFriends}
-        options={{ title: "Invite Friends" }}
       />
     </CreateEventStack.Navigator>
   );
