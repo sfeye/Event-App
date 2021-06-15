@@ -4,10 +4,10 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
 
 const CreateAccount = ({ navigation }) => {
@@ -18,6 +18,10 @@ const CreateAccount = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [touchedName, setTouchedName] = useState(false);
+  const [touchedEmail, setTouchedEmail] = useState(false);
+  const [touchedPassword, setTouchedPassword] = useState(false);
+  const [touchedPhone, setTouchedPhone] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -30,6 +34,15 @@ const CreateAccount = ({ navigation }) => {
     setLoading(false);
     setErrorMessage(error);
   };
+
+  function isDisabled() {
+    return (
+      validate("name", name) !== "" ||
+      validate("email", email) !== "" ||
+      validate("password", password) !== "" ||
+      validate("phone", phoneNumber) !== ""
+    );
+  }
   // --------------------------- //
 
   //add new user to users collection
@@ -73,62 +86,66 @@ const CreateAccount = ({ navigation }) => {
   };
   // --------------------------- //
 
-  // --- Sign Up Open Form ----- //
-  // Card ID: COMP-1
-  // --------------------------- //
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
             placeholderTextColor="#003f5c"
             onChangeText={setName}
+            onFocus={() => setTouchedName(true)}
+            errorMessage={touchedName ? validate("name", name) : ""}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
-            placeholder="Email..."
+            placeholder="Email"
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
+            onFocus={() => setTouchedEmail(true)}
+            errorMessage={touchedEmail ? validate("email", email) : ""}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
             value={password}
             placeholderTextColor="#003f5c"
             onChangeText={setPassword}
+            onFocus={() => setTouchedPassword(true)}
+            errorMessage={touchedPassword ? validate("password", password) : ""}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}
             placeholderTextColor="#003f5c"
-            keyboardType="numeric"
             onChangeText={setPhoneNumber}
+            onFocus={() => setTouchedPhone(true)}
+            errorMessage={touchedPhone ? validate("phone", phoneNumber) : ""}
           />
         </View>
 
-        <TouchableOpacity
-          style={styles.signup}
-          onPress={() => signUpWithEmail()}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" size="large" />
-          ) : (
-            <Text style={styles.signuptext}>Create Account</Text>
-          )}
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator color="#fff" size="large" />
+        ) : (
+          <Button
+            style={styles.signup}
+            onPress={() => signUpWithEmail()}
+            icon={<Icon name="input" size={15} color="white" />}
+            disabled={isDisabled()}
+            title="Create Account"
+          />
+        )}
         <Text
           style={{
             fontSize: 10,
@@ -144,17 +161,57 @@ const CreateAccount = ({ navigation }) => {
   );
 };
 
+const validate = (name, value) => {
+  const regexEmail =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  const regexPhone = /^(\()?[2-9]{1}\d{2}(\))?(-|\s)?[2-9]{1}\d{2}(-|\s)\d{4}$/;
+  switch (name) {
+    case "name":
+      if (value === "") {
+        return "A name is required";
+      } else if (value.length < 3) {
+        return "Name must be more than 3 characters";
+      } else if (!String(value).includes(" ")) {
+        return "Please enter a first and last name";
+      }
+      break;
+    case "email":
+      if (value === "") {
+        return "An email is required";
+      } else if (!regexEmail.test(String(value).toLowerCase())) {
+        return "Invalid email address";
+      }
+      break;
+      break;
+    case "password":
+      if (value === "") {
+        return "A password is required";
+      } else if (value.length < 5) {
+        return "Password must be more than 5 characters";
+      }
+      break;
+    case "phone":
+      if (value === "") {
+        return "A phone number is required";
+      } else if (!regexPhone.test(String(value).toLowerCase())) {
+        return "Invalid phone number format";
+      }
+      break;
+  }
+  return "";
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    paddingTop: "10%",
     zIndex: 0,
   },
   signup: {
     alignItems: "center",
-    backgroundColor: "#add8e6",
     width: 200,
     padding: 10,
     borderRadius: 5,

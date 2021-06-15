@@ -4,7 +4,7 @@ import firebase from "firebase";
 import { Card, ListItem, Button, Icon } from "react-native-elements";
 import FriendCard from "./FriendCard";
 
-const FriendCards = ({ friendEmail }) => {
+const FriendCards = ({ navigation, friendEmail, screenToNav }) => {
   // --- State ----------------- //
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ const FriendCards = ({ friendEmail }) => {
             avatar={u.avatar}
             phone={u.phone}
             friendArr={u.friends.length}
+            screenToNav={screenToNav}
           />
         ))
       ) : (

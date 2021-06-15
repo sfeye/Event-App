@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
 
 const Login = ({ navigation }) => {
@@ -17,6 +18,8 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [touchedEmail, setTouchedEmail] = useState(false);
+  const [touchedPassword, setTouchedPassword] = useState(false);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -43,32 +46,32 @@ const Login = ({ navigation }) => {
   };
   // --------------------------- //
 
-  // --- Sign In Open Form ----- //
-  // Card ID: COMP-3
-  // --------------------------- //
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
 
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             style={styles.inputText}
             placeholder="Email..."
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
+            errorMessage={touchedEmail ? validate("email", email) : ""}
+            onFocus={() => setTouchedEmail(true)}
           />
         </View>
         <View style={styles.inputView}>
-          <TextInput
+          <Input
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
             value={password}
             placeholderTextColor="#003f5c"
             onChangeText={setPassword}
+            errorMessage={touchedPassword ? validate("password", password) : ""}
+            onFocus={() => setTouchedPassword(true)}
           />
         </View>
 
@@ -97,6 +100,27 @@ const Login = ({ navigation }) => {
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const validate = (name, value) => {
+  const regex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  switch (name) {
+    case "email":
+      if (value === "") {
+        return "An email is required";
+      } else if (!regex.test(String(value).toLowerCase())) {
+        return "Invalid email address";
+      }
+      break;
+    case "password":
+      if (value === "") {
+        return "A password is required";
+      }
+      break;
+  }
+  return "";
 };
 
 const styles = StyleSheet.create({

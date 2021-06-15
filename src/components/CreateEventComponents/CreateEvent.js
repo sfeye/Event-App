@@ -3,46 +3,115 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
+  ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
+import { Button, Input, Icon, Overlay } from "react-native-elements";
 import firebase from "firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import InviteFriendCard from "./InviteFriendCard";
 
 const CreateEvent = ({ route, navigation }) => {
   // --- State ----------------- //
+  const [user, setUser] = useState(null);
   const [location, setLocation] = useState("");
-  const [datetime, setDateTime] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
-  const [length, setLength] = useState(friends.length);
   const [loading, setLoading] = useState(false);
+  const [touchedDescription, setTouchedDescription] = useState(false);
+  const [touchedLocation, setTouchedLocation] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("date");
   // --------------------------- //
 
   // --- Helpers --------------- //
   const onChangeDate = (event, selectedDate) => {
-    setDateTime(selectedDate);
+    setShow(Platform.OS === "ios");
+    mode === "date" ? setDate(selectedDate) : setTime(selectedDate);
   };
 
   const resetState = () => {
     setLocation("");
-    setDateTime(new Date());
+    setDate(new Date());
+    setTime(new Date());
     setDescription("");
     setFriends([]);
     setLoading(false);
+    setShow(false);
+    setMode("date");
   };
 
-  const addFriend = (length, friendArr) => {
-    setLength(length);
-    setFriends(friendArr);
+  function arrayRemove(arr, value) {
+    return arr.filter(function (ele) {
+      return ele != value;
+    });
+  }
+
+  const addSelected = (selected, friendName) => {
+    if (!selected) {
+      var tempArr = friends;
+      tempArr.push(friendName);
+      setFriends(tempArr);
+    }
+
+    if (selected && friends.includes(friendName)) {
+      var tempArr = friends;
+      tempArr = arrayRemove(tempArr, friendName);
+      setFriends(tempArr);
+    }
+  };
+
+  const isDisabled = () => {
+    return (
+      validate("description", description) !== "" ||
+      validate("location", location) !== ""
+    );
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
   };
   // --------------------------- //
 
   // --- Post to DB ------------ //
   const createEvent = () => {
     setLoading(true);
+
+    const datetime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      time.getSeconds(),
+      time.getMilliseconds()
+    );
+
+    if (friends.length === 0) {
+      alert("You have not selected any friends...");
+      setLoading(false);
+      return;
+    }
+    if (datetime <= new Date()) {
+      alert("Please select a date in the future...");
+      setLoading(false);
+      return;
+    }
 
     firebase
       .firestore()
@@ -69,68 +138,143 @@ const CreateEvent = ({ route, navigation }) => {
   };
   // --------------------------- //
 
+  // --- Read DB --------------- //
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("users")
+      .where("email", "==", route.params.user)
+      .onSnapshot((snapshot) => {
+        setUser(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            u: doc.data(),
+          }))
+        );
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  // --------------------------- //
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.title}>
-          Hi {route.params.user}, let's create an event!
-        </Text>
+        <Overlay
+          isVisible={open}
+          onBackdropPress={() => setOpen(!open)}
+          fullScreen
+        >
+          <TouchableOpacity style={styles.exit} onPress={() => setOpen(false)}>
+            <Icon name="cancel" size={25} color="black" />
+          </TouchableOpacity>
+          <ScrollView>
+            {user ? (
+              user.map(({ id, u }) =>
+                u.friends.map((friend) => (
+                  <InviteFriendCard
+                    key={id + friend}
+                    friend={friend}
+                    invitedFriends={friends}
+                    addSelected={addSelected}
+                  />
+                ))
+              )
+            ) : (
+              <React.Fragment />
+            )}
+          </ScrollView>
+        </Overlay>
 
-        <TextInput
+        <Input
           style={styles.input}
           onChangeText={setDescription}
           placeholder="Name or description"
           value={description}
+          onFocus={() => setTouchedDescription(true)}
+          errorMessage={
+            touchedDescription ? validate("description", description) : ""
+          }
         />
 
-        <TextInput
+        <Input
           style={styles.input}
           onChangeText={setLocation}
           placeholder="Location"
           value={location}
+          onFocus={() => setTouchedLocation(true)}
+          errorMessage={touchedLocation ? validate("location", location) : ""}
         />
 
-        <View style={styles.datePickers}>
-          <DateTimePicker
-            testID="datePicker"
-            value={datetime}
-            mode={"datetime"}
-            is24Hour={true}
-            display="default"
-            onChange={onChangeDate}
-          />
+        <View>
+          <View style={styles.datePickers}>
+            <Button
+              icon={<Icon name="event" size={15} color="white" />}
+              title="Pick a date"
+              onPress={() => showDatepicker()}
+            />
+            <Button
+              icon={<Icon name="schedule" size={15} color="white" />}
+              title="Pick a time"
+              onPress={() => showTimepicker()}
+            />
+          </View>
+          <View style={styles.picker}>
+            {show && (
+              <DateTimePicker
+                testID="datePicker"
+                value={mode === "date" ? date : time}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChangeDate}
+              />
+            )}
+          </View>
         </View>
 
         <TouchableOpacity
           style={styles.inviteFriends}
-          onPress={() =>
-            navigation.push("InviteFriends", {
-              email: route.params.user,
-              friends: friends,
-              paramAddFriend: addFriend,
-            })
-          }
+          onPress={() => setOpen(true)}
         >
           <Text>+Friends {friends.length}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        <Button
           style={styles.createBtn}
+          icon={<Icon name="input" size={15} color="white" />}
+          title="Create Event"
           onPress={() => createEvent()}
-          disabled={loading}
-        >
-          <Text style={styles.createTxt}>Create Event</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          disabled={loading || isDisabled()}
+        />
+        <Button
           style={styles.createBtn}
+          icon={<Icon name="input" size={15} color="white" />}
+          title="Reset"
           onPress={() => resetState()}
           disabled={loading}
-        >
-          <Text style={styles.createTxt}>Reset</Text>
-        </TouchableOpacity>
+        />
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const validate = (name, value) => {
+  switch (name) {
+    case "description":
+      if (value === "") {
+        return "A description is required";
+      }
+      break;
+    case "location":
+      if (value === "") {
+        return "A location is required";
+      }
+      break;
+  }
+
+  return "";
 };
 
 const styles = StyleSheet.create({
@@ -145,7 +289,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    marginTop: "15%",
+    marginTop: "5%",
     flex: 1,
     height: "100%",
   },
@@ -166,10 +310,8 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   createBtn: {
-    backgroundColor: "#ececec",
     padding: 10,
     borderRadius: 10,
-    marginTop: 10,
     alignSelf: "center",
     width: "60%",
   },
@@ -179,9 +321,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   datePickers: {
-    alignSelf: "center",
-    marginTop: 10,
-    width: "60%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  exit: {
+    alignSelf: "flex-end",
+    padding: 5,
+  },
+  picker: {
+    marginTop: 20,
+    marginLeft: "35%",
   },
 });
 

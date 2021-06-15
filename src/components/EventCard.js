@@ -1,7 +1,16 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { Overlay } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
+import FriendCards from "./FriendPageComponents/FriendCards";
+import { useNavigation } from "@react-navigation/native";
 
 const EventCard = ({
   username,
@@ -11,13 +20,17 @@ const EventCard = ({
   date,
   time,
   description,
+  invitedFriends,
   accepted,
   declined,
+  isPostedBy,
 }) => {
   const active1 = accepted.includes(username.toString());
   const active2 = declined.includes(username.toString());
+  const navigation = useNavigation();
   // --- State ----------------- //
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [going, setGoing] = useState(active1);
   const [notGoing, setNotGoing] = useState(active2);
   // --------------------------- //
@@ -84,13 +97,41 @@ const EventCard = ({
   };
   // --------------------------- //
 
+  // --- Blur ------------------- //
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      setOpen(false);
+    });
+  });
+  // --------------------------- //
+
   return (
     <View style={styles.container}>
+      <Overlay
+        isVisible={open}
+        overlayStyle={styles.overlay}
+        onBackdropPress={() => setOpen(!open)}
+      >
+        <ScrollView>
+          {invitedFriends.map((email) => (
+            <FriendCards
+              friendEmail={email}
+              key={email}
+              screenToNav="HomeFriendProfile"
+            />
+          ))}
+        </ScrollView>
+      </Overlay>
+
       <View style={styles.header}>
         <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
-        <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
-          <Ionicons name={"trash"} size={20} color={"red"} />
-        </TouchableOpacity>
+        {isPostedBy ? (
+          <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
+            <Ionicons name={"trash"} size={20} color={"red"} />
+          </TouchableOpacity>
+        ) : (
+          <React.Fragment />
+        )}
       </View>
 
       <Text style={styles.description}>Description: {description}</Text>
@@ -103,7 +144,7 @@ const EventCard = ({
 
       <TouchableOpacity
         style={styles.invitedFriends}
-        onPress={() => alert("todo")}
+        onPress={() => setOpen(true)}
         disabled={loading}
       >
         <Text>Invited Friends</Text>
@@ -162,6 +203,10 @@ const styles = StyleSheet.create({
   location: {},
   dateTime: {},
   description: {},
+  overlay: {
+    width: "80%",
+    height: "80%",
+  },
   // --- Accept/Decline BTNS --- //
   btnContainer: {
     flexDirection: "row",
