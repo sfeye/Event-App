@@ -1,36 +1,20 @@
 import React, { useEffect } from "react";
 import { View, Text, Button } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 
 const AddFriendResults = ({ currentUser, otherUsers }) => {
-  const addFriend = (
-    otherEmail,
-    otherId,
-    otherFriends,
-    currentEmail,
-    currentId,
-    currentFriends
-  ) => {
+  const addFriend = (otherId, otherFriends, currentEmail) => {
     //if temp curr friends include new friend email then alert
-    var tempCurrFriends = currentFriends;
     var tempOtherFriends = otherFriends;
-
-    tempCurrFriends.push(otherEmail);
     tempOtherFriends.push(currentEmail);
 
-    addToCurrentUser(currentId, tempCurrFriends);
-    addToFriend(otherId, tempOtherFriends);
+    addToPending(otherId, tempOtherFriends);
   };
 
-  const addToCurrentUser = (currentId, currentFriends) => {
-    firebase.firestore().collection("users").doc(currentId).update({
-      friends: currentFriends,
-    });
-  };
-
-  const addToFriend = (friendId, otherFriends) => {
+  const addToPending = (friendId, otherFriends) => {
     firebase.firestore().collection("users").doc(friendId).update({
-      friends: otherFriends,
+      pending: otherFriends,
     });
   };
 
@@ -49,24 +33,26 @@ const AddFriendResults = ({ currentUser, otherUsers }) => {
         ? otherUsers.map((otherUser) => (
             <View key={otherUser.id}>
               <Text>{otherUser.friend.name}</Text>
-              <Button
-                transparent
-                title="Add"
-                disabled={isAlreadyFriend(
+              {otherUser.friend.pending.includes(currentUser.friend.email) ? (
+                <Text>Pending...</Text>
+              ) : isAlreadyFriend(
                   currentUser.friend.friends,
                   otherUser.friend.email
-                )}
-                onPress={() =>
-                  addFriend(
-                    otherUser.friend.email,
-                    otherUser.id,
-                    otherUser.friend.friends,
-                    currentUser.friend.email,
-                    currentUser.id,
-                    currentUser.friend.friends
-                  )
-                }
-              ></Button>
+                ) ? (
+                <Ionicons size={20} name="checkmark-circle" color="green" />
+              ) : (
+                <Button
+                  transparent
+                  title="Add"
+                  onPress={() =>
+                    addFriend(
+                      otherUser.id,
+                      otherUser.friend.pending,
+                      currentUser.friend.email
+                    )
+                  }
+                ></Button>
+              )}
             </View>
           ))
         : React.Fragment}
