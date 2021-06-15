@@ -47,7 +47,11 @@ const Friends = ({ route, navigation }) => {
             ? friendCards.map(({ id, user }) =>
                 user.friends
                   ? user.friends.map((friend) => (
-                      <FriendCards key={id + friend} friendEmail={friend} />
+                      <FriendCards
+                        key={id + friend}
+                        friendEmail={friend}
+                        screenToNav="FriendProfile"
+                      />
                     ))
                   : React.Fragment
               )

@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     alignSelf: "center",
     marginTop: 20,
-    width: "70%",
+    width: "100%",
   },
   infoEmail: {
     fontSize: 25,

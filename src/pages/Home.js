@@ -104,19 +104,6 @@ const Home = ({ route, navigation }) => {
     <SafeAreaView style={styles.safeView}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.headerTxt}>
-              Logged in as {route.params.user}
-            </Text>
-
-            <TouchableOpacity
-              style={styles.headerBtn}
-              onPress={() => firebase.auth().signOut()}
-            >
-              <Text>Log Out</Text>
-            </TouchableOpacity>
-          </View>
-
           {eventCards ? (
             eventCards.map(({ id, eventCard }) =>
               isCurrentUserInvited(eventCard.friends, eventCard.email) ? (
@@ -129,6 +116,7 @@ const Home = ({ route, navigation }) => {
                   date={processDate(eventCard.datetime)}
                   time={processTime(eventCard.datetime)}
                   description={eventCard.description}
+                  invitedFriends={eventCard.friends}
                   accepted={eventCard.accepted}
                   declined={eventCard.declined}
                   isPostedBy={isPostedByCurrentUser(eventCard.email)}

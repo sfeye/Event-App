@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
 import { Button, Input, Icon, Overlay } from "react-native-elements";
 import firebase from "firebase";
@@ -17,26 +18,33 @@ const CreateEvent = ({ route, navigation }) => {
   // --- State ----------------- //
   const [user, setUser] = useState(null);
   const [location, setLocation] = useState("");
-  const [datetime, setDateTime] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
   const [description, setDescription] = useState("");
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(false);
   const [touchedDescription, setTouchedDescription] = useState(false);
   const [touchedLocation, setTouchedLocation] = useState(false);
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("date");
   // --------------------------- //
 
   // --- Helpers --------------- //
   const onChangeDate = (event, selectedDate) => {
-    setDateTime(selectedDate);
+    setShow(Platform.OS === "ios");
+    mode === "date" ? setDate(selectedDate) : setTime(selectedDate);
   };
 
   const resetState = () => {
     setLocation("");
-    setDateTime(new Date());
+    setDate(new Date());
+    setTime(new Date());
     setDescription("");
     setFriends([]);
     setLoading(false);
+    setShow(false);
+    setMode("date");
   };
 
   function arrayRemove(arr, value) {
@@ -65,11 +73,34 @@ const CreateEvent = ({ route, navigation }) => {
       validate("location", location) !== ""
     );
   };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
   // --------------------------- //
 
   // --- Post to DB ------------ //
   const createEvent = () => {
     setLoading(true);
+
+    const datetime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      time.getSeconds(),
+      time.getMilliseconds()
+    );
 
     if (friends.length === 0) {
       alert("You have not selected any friends...");
@@ -77,7 +108,7 @@ const CreateEvent = ({ route, navigation }) => {
       return;
     }
     if (datetime <= new Date()) {
-      alert("Please select a date and time in the future...");
+      alert("Please select a date in the future...");
       setLoading(false);
       return;
     }
@@ -130,9 +161,6 @@ const CreateEvent = ({ route, navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.title}>
-          Hi {route.params.user}, let's create an event!
-        </Text>
         <Overlay
           isVisible={open}
           onBackdropPress={() => setOpen(!open)}
@@ -179,15 +207,31 @@ const CreateEvent = ({ route, navigation }) => {
           errorMessage={touchedLocation ? validate("location", location) : ""}
         />
 
-        <View style={styles.datePickers}>
-          <DateTimePicker
-            testID="datePicker"
-            value={datetime}
-            mode={"datetime"}
-            is24Hour={true}
-            display="default"
-            onChange={onChangeDate}
-          />
+        <View>
+          <View style={styles.datePickers}>
+            <Button
+              icon={<Icon name="event" size={15} color="white" />}
+              title="Pick a date"
+              onPress={() => showDatepicker()}
+            />
+            <Button
+              icon={<Icon name="schedule" size={15} color="white" />}
+              title="Pick a time"
+              onPress={() => showTimepicker()}
+            />
+          </View>
+          <View style={styles.picker}>
+            {show && (
+              <DateTimePicker
+                testID="datePicker"
+                value={mode === "date" ? date : time}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChangeDate}
+              />
+            )}
+          </View>
         </View>
 
         <TouchableOpacity
@@ -245,7 +289,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    marginTop: "10%",
+    marginTop: "5%",
     flex: 1,
     height: "100%",
   },
@@ -277,13 +321,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   datePickers: {
-    alignSelf: "center",
-    marginTop: 10,
-    width: "60%",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   exit: {
     alignSelf: "flex-end",
     padding: 5,
+  },
+  picker: {
+    marginTop: 20,
+    marginLeft: "35%",
   },
 });
 
