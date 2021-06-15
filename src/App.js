@@ -17,6 +17,7 @@ import Settings from "./components/SettingsPageComponents/Settings";
 import ForgotPassword from "./components/ForgotPassword";
 import AddNewFriends from "./components/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
+import PendingFriendRequests from "./components/PendingFriendRequests";
 import FriendProfile from "./components/FriendPageComponents/FriendProfile";
 
 export default function App() {
@@ -107,6 +108,11 @@ export default function App() {
         name="AddNewFriends"
         component={AddNewFriends}
         options={{ title: "Add Friends" }}
+      />
+      <FriendStack.Screen
+        name="PendingFriendRequests"
+        component={PendingFriendRequests}
+        options={{ title: "Pending Friends" }}
       />
       <FriendStack.Screen
         name="FriendProfile"

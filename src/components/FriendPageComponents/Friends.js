@@ -68,6 +68,16 @@ const Friends = ({ route, navigation }) => {
               })
             }
           />
+          <Button
+            style={styles.textInput}
+            icon={<Icon name="input" size={15} color="white" />}
+            title="Pending Friends"
+            onPress={() =>
+              navigation.push("PendingFriendRequests", {
+                currentUser: route.params.user,
+              })
+            }
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
