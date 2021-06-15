@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { Overlay } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
+import FriendCards from "./FriendPageComponents/FriendCards";
 
 const EventCard = ({
   username,
@@ -11,6 +19,7 @@ const EventCard = ({
   date,
   time,
   description,
+  invitedFriends,
   accepted,
   declined,
   isPostedBy,
@@ -19,6 +28,7 @@ const EventCard = ({
   const active2 = declined.includes(username.toString());
   // --- State ----------------- //
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [going, setGoing] = useState(active1);
   const [notGoing, setNotGoing] = useState(active2);
   // --------------------------- //
@@ -87,6 +97,18 @@ const EventCard = ({
 
   return (
     <View style={styles.container}>
+      <Overlay
+        isVisible={open}
+        overlayStyle={styles.overlay}
+        onBackdropPress={() => setOpen(!open)}
+      >
+        <ScrollView>
+          {invitedFriends.map((email) => (
+            <FriendCards friendEmail={email} />
+          ))}
+        </ScrollView>
+      </Overlay>
+
       <View style={styles.header}>
         <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
         {isPostedBy ? (
@@ -108,7 +130,7 @@ const EventCard = ({
 
       <TouchableOpacity
         style={styles.invitedFriends}
-        onPress={() => alert("todo")}
+        onPress={() => setOpen(true)}
         disabled={loading}
       >
         <Text>Invited Friends</Text>
@@ -167,6 +189,10 @@ const styles = StyleSheet.create({
   location: {},
   dateTime: {},
   description: {},
+  overlay: {
+    width: "80%",
+    height: "80%",
+  },
   // --- Accept/Decline BTNS --- //
   btnContainer: {
     flexDirection: "row",

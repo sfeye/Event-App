@@ -129,6 +129,7 @@ const Home = ({ route, navigation }) => {
                   date={processDate(eventCard.datetime)}
                   time={processTime(eventCard.datetime)}
                   description={eventCard.description}
+                  invitedFriends={eventCard.friends}
                   accepted={eventCard.accepted}
                   declined={eventCard.declined}
                   isPostedBy={isPostedByCurrentUser(eventCard.email)}
