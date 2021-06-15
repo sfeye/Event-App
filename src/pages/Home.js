@@ -104,19 +104,6 @@ const Home = ({ route, navigation }) => {
     <SafeAreaView style={styles.safeView}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.headerTxt}>
-              Logged in as {route.params.user}
-            </Text>
-
-            <TouchableOpacity
-              style={styles.headerBtn}
-              onPress={() => firebase.auth().signOut()}
-            >
-              <Text>Log Out</Text>
-            </TouchableOpacity>
-          </View>
-
           {eventCards ? (
             eventCards.map(({ id, eventCard }) =>
               isCurrentUserInvited(eventCard.friends, eventCard.email) ? (

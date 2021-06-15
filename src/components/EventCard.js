@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import { Overlay } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import FriendCards from "./FriendPageComponents/FriendCards";
+import { useNavigation } from "@react-navigation/native";
 
 const EventCard = ({
   username,
@@ -26,6 +27,7 @@ const EventCard = ({
 }) => {
   const active1 = accepted.includes(username.toString());
   const active2 = declined.includes(username.toString());
+  const navigation = useNavigation();
   // --- State ----------------- //
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -95,6 +97,14 @@ const EventCard = ({
   };
   // --------------------------- //
 
+  // --- Blur ------------------- //
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      setOpen(false);
+    });
+  });
+  // --------------------------- //
+
   return (
     <View style={styles.container}>
       <Overlay
@@ -104,7 +114,11 @@ const EventCard = ({
       >
         <ScrollView>
           {invitedFriends.map((email) => (
-            <FriendCards friendEmail={email} />
+            <FriendCards
+              friendEmail={email}
+              key={email}
+              screenToNav="HomeFriendProfile"
+            />
           ))}
         </ScrollView>
       </Overlay>

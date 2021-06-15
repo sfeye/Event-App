@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer, TabActions } from "@react-navigation/native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +17,7 @@ import Settings from "./components/SettingsPageComponents/Settings";
 import ForgotPassword from "./components/ForgotPassword";
 import AddNewFriends from "./components/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
+import FriendProfile from "./components/FriendPageComponents/FriendProfile";
 
 export default function App() {
   // --- Initialize Firebase --- //
@@ -41,6 +42,38 @@ export default function App() {
   // --------------------------- //
 
   // --- Stacks ---------------- //
+  const HomeStackScreen = () => (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeStack"
+        component={Home}
+        options={{
+          title: "Welcome " + authUser.email,
+          headerTitleAlign: "left",
+          headerTitleStyle: {
+            fontSize: 15,
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => firebase.auth().signOut()}
+              style={{ maginBottom: 10, marginRight: 20 }}
+            >
+              <Ionicons name={"power"} size={20} color={"black"} />
+            </TouchableOpacity>
+          ),
+        }}
+        initialParams={{ user: authUser.email }}
+      />
+      <HomeStack.Screen
+        name="HomeFriendProfile"
+        component={FriendProfile}
+        options={({ route }) => ({
+          title: route.params.name + "'s Profile",
+        })}
+      />
+    </HomeStack.Navigator>
+  );
+
   const CreateEventStackScreen = () => (
     <CreateEventStack.Navigator>
       <CreateEventStack.Screen
@@ -74,6 +107,13 @@ export default function App() {
         name="AddNewFriends"
         component={AddNewFriends}
         options={{ title: "Add Friends" }}
+      />
+      <FriendStack.Screen
+        name="FriendProfile"
+        component={FriendProfile}
+        options={({ route }) => ({
+          title: route.params.name + "'s Profile",
+        })}
       />
     </FriendStack.Navigator>
   );
@@ -150,7 +190,7 @@ export default function App() {
       >
         <Tabs.Screen
           name="Home"
-          component={Home}
+          component={HomeStackScreen}
           initialParams={{ user: authUser.email }}
         />
         <Tabs.Screen name="Search" component={SearchStackScreen} />
@@ -183,6 +223,7 @@ export default function App() {
 }
 
 const AuthStack = createStackNavigator();
+const HomeStack = createStackNavigator();
 const CreateEventStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const FriendStack = createStackNavigator();
