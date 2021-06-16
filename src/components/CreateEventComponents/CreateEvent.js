@@ -226,6 +226,7 @@ const CreateEvent = ({ route, navigation }) => {
                 />
               }
               title="Pick a date"
+              raised
               onPress={() => showDatepicker()}
             />
             <Button
@@ -239,6 +240,7 @@ const CreateEvent = ({ route, navigation }) => {
                 />
               }
               title="Pick a time"
+              raised
               onPress={() => showTimepicker()}
             />
           </View>
@@ -344,8 +346,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   createBtn: {
-    padding: 10,
-    borderRadius: 10,
+    margin: 10,
     alignSelf: "center",
     width: "60%",
   },

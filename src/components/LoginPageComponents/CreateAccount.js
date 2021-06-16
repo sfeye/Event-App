@@ -148,6 +148,7 @@ const CreateAccount = ({ navigation }) => {
             onPress={() => signUpWithEmail()}
             icon={<Icon name="input" size={15} color="white" />}
             disabled={isDisabled()}
+            raised
             title="Create Account"
           />
         )}
