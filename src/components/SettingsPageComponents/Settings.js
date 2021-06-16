@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { filler_alt } from "../../styles/colors";
 import { Avatar, Input } from "react-native-elements";
 import firebase from "firebase";
 
@@ -249,6 +250,7 @@ const validate = (name, value) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: filler_alt,
   },
   avatar: {
     alignSelf: "center",

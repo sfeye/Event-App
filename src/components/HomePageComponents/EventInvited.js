@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
 
-const EventInvited = ({ currUser, email, going }) => {
+const EventInvited = ({ currUser, email, going, declined }) => {
   const navigation = useNavigation();
   // --- State ----------------- //
   const [invitedFriend, setInvitedFriend] = useState(null);
@@ -14,7 +14,34 @@ const EventInvited = ({ currUser, email, going }) => {
 
   // --- Helpers --------------- //
   function isGoing() {
-    return going.includes(email);
+    if (going.includes(email)) {
+      return (
+        <Ionicons
+          name="checkmark-circle"
+          color="green"
+          size={25}
+          style={{ alignSelf: "center", marginLeft: "auto" }}
+        />
+      );
+    } else if (declined.includes(email)) {
+      return (
+        <Ionicons
+          name="close-circle"
+          color="red"
+          size={25}
+          style={{ alignSelf: "center", marginLeft: "auto" }}
+        />
+      );
+    } else {
+      return (
+        <Ionicons
+          name="help-circle"
+          color="gray"
+          size={25}
+          style={{ alignSelf: "center", marginLeft: "auto" }}
+        />
+      );
+    }
   }
 
   function getInitials() {
@@ -69,21 +96,7 @@ const EventInvited = ({ currUser, email, going }) => {
             <Text style={{ alignSelf: "center", marginLeft: 10 }}>
               {invitedFriend[0].user.name}
             </Text>
-            {isGoing() ? (
-              <Ionicons
-                name="checkmark-circle"
-                color="green"
-                size={20}
-                style={{ alignSelf: "center", marginLeft: "auto" }}
-              />
-            ) : (
-              <Ionicons
-                name="close-circle"
-                color="red"
-                size={20}
-                style={{ alignSelf: "center", marginLeft: "auto" }}
-              />
-            )}
+            {isGoing()}
           </View>
         </Card>
       ) : (

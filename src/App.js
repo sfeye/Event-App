@@ -9,16 +9,16 @@ import firebase from "firebase";
 import { firebaseConfig } from "./firebase";
 import { primary, filler_alt } from "./styles/colors";
 import Login from "./pages/Login";
-import CreateAccount from "./pages/CreateAccount";
+import CreateAccount from "./components/LoginPageComponents/CreateAccount";
 import Home from "./pages/Home";
 import Friends from "./components/FriendPageComponents/Friends";
 import Search from "./components/SearchPageComponents/Search";
 import CreateEvent from "./components/CreateEventComponents/CreateEvent";
 import Settings from "./components/SettingsPageComponents/Settings";
-import ForgotPassword from "./components/ForgotPassword";
-import AddNewFriends from "./components/AddNewFriends";
+import ForgotPassword from "./components/LoginPageComponents/ForgotPassword";
+import AddNewFriends from "./components/FriendPageComponents/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
-import PendingFriendRequests from "./components/PendingFriendRequests";
+import PendingFriendRequests from "./components/FriendPageComponents/PendingFriendRequests";
 import FriendProfile from "./components/FriendPageComponents/FriendProfile";
 
 export default function App() {

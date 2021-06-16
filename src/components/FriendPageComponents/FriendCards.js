@@ -42,7 +42,6 @@ const FriendCards = ({ navigation, currUser, friendEmail, screenToNav }) => {
             email={u.email}
             avatar={u.avatar}
             phone={u.phone}
-            friendLength={u.friends.length}
             friendArr={u.friends}
             pendingArr={u.pending}
             screenToNav={screenToNav}

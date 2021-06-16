@@ -115,7 +115,13 @@ const EventCard = ({
       >
         <ScrollView>
           {invitedFriends.map((email) => (
-            <EventInvited currUser={username} email={email} going={accepted} />
+            <EventInvited
+              key={email}
+              currUser={username}
+              email={email}
+              going={accepted}
+              declined={declined}
+            />
           ))}
         </ScrollView>
       </Overlay>

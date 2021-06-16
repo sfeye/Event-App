@@ -190,26 +190,29 @@ const CreateEvent = ({ route, navigation }) => {
           </ScrollView>
         </Overlay>
 
-        <Input
-          style={styles.input}
-          onChangeText={setDescription}
-          placeholder="Name or description"
-          value={description}
-          onFocus={() => setTouchedDescription(true)}
-          errorMessage={
-            touchedDescription ? validate("description", description) : ""
-          }
-        />
+        <View style={{ marginBottom: 10 }}>
+          <Input
+            style={styles.input}
+            onChangeText={setDescription}
+            leftIcon={<Ionicons name="document-text" size={24} color="gray" />}
+            placeholder="Name or description"
+            value={description}
+            onFocus={() => setTouchedDescription(true)}
+            errorMessage={
+              touchedDescription ? validate("description", description) : ""
+            }
+          />
 
-        <Input
-          style={styles.input}
-          onChangeText={setLocation}
-          placeholder="Location"
-          value={location}
-          onFocus={() => setTouchedLocation(true)}
-          errorMessage={touchedLocation ? validate("location", location) : ""}
-        />
-
+          <Input
+            style={styles.input}
+            leftIcon={<Ionicons name="location" size={24} color="gray" />}
+            onChangeText={setLocation}
+            placeholder="Location"
+            value={location}
+            onFocus={() => setTouchedLocation(true)}
+            errorMessage={touchedLocation ? validate("location", location) : ""}
+          />
+        </View>
         <View>
           <View style={styles.datePickers}>
             <Button
@@ -326,19 +329,12 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    paddingTop: "5%",
+    paddingTop: 10,
     flex: 1,
     height: "100%",
     backgroundColor: filler_alt,
   },
-  input: {
-    margin: 5,
-    height: 45,
-    borderWidth: 1,
-    width: "80%",
-    padding: 10,
-    alignSelf: "center",
-  },
+  input: {},
   inviteFriends: {
     alignSelf: "center",
     backgroundColor: secondary,

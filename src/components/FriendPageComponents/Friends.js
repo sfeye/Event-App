@@ -6,7 +6,8 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { Button, Icon } from "react-native-elements";
+import { filler_alt } from "../../styles/colors";
 import firebase from "firebase";
 import FriendCards from "./FriendCards";
 
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
   safeView: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
+    backgroundColor: filler_alt,
   },
   container: {
     flex: 1,
