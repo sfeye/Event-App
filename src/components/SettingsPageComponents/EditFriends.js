@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Card } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import { filler_alt } from "../../styles/colors";
 import firebase from "firebase";
 
 const EditFriends = ({ route, navigation }) => {
@@ -54,24 +61,26 @@ const EditFriends = ({ route, navigation }) => {
   }, []);
   // --------------------------- //
   return (
-    <View>
-      {route.params.friends ? (
-        route.params.friends.map((friend) => (
-          <Card key={friend}>
-            <View style={styles.cardContainer}>
-              <Text>{friend}</Text>
-              <TouchableOpacity
-                onPress={() => submit(friend)}
-                style={styles.trashBtn}
-              >
-                <Ionicons name={"trash"} size={25} color={"red"} />
-              </TouchableOpacity>
-            </View>
-          </Card>
-        ))
-      ) : (
-        <Text>You have no friends, go to Friends page to add more!</Text>
-      )}
+    <View style={{ backgroundColor: filler_alt, minHeight: "100%" }}>
+      <ScrollView>
+        {route.params.friends ? (
+          route.params.friends.map((friend) => (
+            <Card key={friend}>
+              <View style={styles.cardContainer}>
+                <Text>{friend}</Text>
+                <TouchableOpacity
+                  onPress={() => submit(friend)}
+                  style={styles.trashBtn}
+                >
+                  <Ionicons name={"trash"} size={25} color={"red"} />
+                </TouchableOpacity>
+              </View>
+            </Card>
+          ))
+        ) : (
+          <Text>You have no friends, go to Friends page to add more!</Text>
+        )}
+      </ScrollView>
     </View>
   );
 };

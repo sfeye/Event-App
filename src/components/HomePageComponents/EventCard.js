@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Overlay } from "react-native-elements";
+import { secondary, filler_alt } from "../../styles/colors";
+import { Overlay, Card } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
-import FriendCards from "./FriendPageComponents/FriendCards";
 import { useNavigation } from "@react-navigation/native";
+import EventInvited from "./EventInvited";
 
 const EventCard = ({
   username,
@@ -114,94 +115,123 @@ const EventCard = ({
       >
         <ScrollView>
           {invitedFriends.map((email) => (
-            <FriendCards
-              friendEmail={email}
+            <EventInvited
               key={email}
-              screenToNav="HomeFriendProfile"
+              currUser={username}
+              email={email}
+              going={accepted}
+              declined={declined}
             />
           ))}
         </ScrollView>
       </Overlay>
 
-      <View style={styles.header}>
-        <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
-        {isPostedBy ? (
-          <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
-            <Ionicons name={"trash"} size={20} color={"red"} />
+      <Card containerStyle={{ backgroundColor: filler_alt }}>
+        <View style={styles.header}>
+          <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
+          {isPostedBy ? (
+            <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
+              <Ionicons name={"trash"} size={20} color={"red"} />
+            </TouchableOpacity>
+          ) : (
+            <React.Fragment />
+          )}
+        </View>
+
+        <View style={styles.viewText}>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+
+        <View style={styles.viewText}>
+          <Ionicons
+            name={"location"}
+            size={20}
+            color={secondary}
+            style={{ marginRight: 5 }}
+          />
+          <Text style={styles.location}>{location}</Text>
+        </View>
+
+        <View style={styles.viewText}>
+          <Ionicons
+            name={"time"}
+            size={20}
+            color={secondary}
+            style={{ marginRight: 5 }}
+          />
+          <Text style={styles.dateTime}>
+            {date} at {time}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.invitedFriends}
+          onPress={() => setOpen(true)}
+          disabled={loading}
+        >
+          <Text style={{ color: filler_alt, fontWeight: "700" }}>
+            Invited Friends
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.btnContainer}>
+          <TouchableOpacity
+            style={going ? styles.goingBoldBtn : styles.goingBtn}
+            onPress={() => acceptEvent()}
+            disabled={loading || going}
+          >
+            <Text style={going ? styles.goingBoldTxt : styles.goingTxt}>
+              Going? +{accepted.length}
+            </Text>
           </TouchableOpacity>
-        ) : (
-          <React.Fragment />
-        )}
-      </View>
 
-      <Text style={styles.description}>Description: {description}</Text>
-
-      <Text style={styles.location}>Location: {location}</Text>
-
-      <Text style={styles.dateTime}>Date: {date}</Text>
-
-      <Text style={styles.dateTime}>Time: {time}</Text>
-
-      <TouchableOpacity
-        style={styles.invitedFriends}
-        onPress={() => setOpen(true)}
-        disabled={loading}
-      >
-        <Text>Invited Friends</Text>
-      </TouchableOpacity>
-
-      <View style={styles.btnContainer}>
-        <TouchableOpacity
-          style={going ? styles.goingBoldBtn : styles.goingBtn}
-          onPress={() => acceptEvent()}
-          disabled={loading || going}
-        >
-          <Text style={going ? styles.goingBoldTxt : styles.goingTxt}>
-            Going? +{accepted.length}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={notGoing ? styles.declineBoldBtn : styles.declineBtn}
-          onPress={() => declineEvent()}
-          disabled={loading || notGoing}
-        >
-          <Text style={notGoing ? styles.declineBoldTxt : styles.declineTxt}>
-            Decline? +{declined.length}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={notGoing ? styles.declineBoldBtn : styles.declineBtn}
+            onPress={() => declineEvent()}
+            disabled={loading || notGoing}
+          >
+            <Text style={notGoing ? styles.declineBoldTxt : styles.declineTxt}>
+              Decline? +{declined.length}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Card>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderStyle: "solid",
-    borderWidth: 1,
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
+    flex: 1,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  viewText: {
+    flexDirection: "row",
+    marginBottom: 5,
   },
   invitedFriends: {
-    borderRadius: 20,
     marginTop: 10,
     margin: 2.5,
-    backgroundColor: "#add8e6",
+    backgroundColor: secondary,
     padding: 10,
     maxWidth: "50%",
     alignSelf: "flex-start",
   },
   postedBy: {
     fontWeight: "600",
+    alignSelf: "center",
   },
-  location: {},
-  dateTime: {},
+  location: {
+    alignSelf: "center",
+  },
+  dateTime: {
+    alignSelf: "center",
+  },
   description: {},
   overlay: {
     width: "80%",

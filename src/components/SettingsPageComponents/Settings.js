@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { secondary, filler_alt } from "../../styles/colors";
 import { Avatar, Input } from "react-native-elements";
 import firebase from "firebase";
 
@@ -65,6 +66,10 @@ const Settings = ({ route, navigation }) => {
       friends: temp,
     });
   };
+
+  const setPhoneNormal = (value) => {
+    setPhoneInput(normalizeInput(value, phoneInput));
+  };
   // --------------------------- //
 
   // --- Read DB --------------- //
@@ -98,6 +103,7 @@ const Settings = ({ route, navigation }) => {
                   rounded
                   title={getInitials(info.name)}
                   source={{ uri: info.avatar }}
+                  placeholderStyle={{ backgroundColor: secondary }}
                 />
               </View>
               <View style={styles.infoContainer}>
@@ -153,8 +159,9 @@ const Settings = ({ route, navigation }) => {
                       style={styles.input}
                       placeholder={info.phone}
                       value={phoneInput}
-                      onChangeText={setPhoneInput}
+                      onChangeText={setPhoneNormal}
                       onFocus={() => setTouchedPhone(true)}
+                      keyboardType="numeric"
                       errorMessage={
                         touchedPhone ? validate("phone", phoneInput) : ""
                       }
@@ -222,6 +229,24 @@ const Settings = ({ route, navigation }) => {
   );
 };
 
+const normalizeInput = (value, previousValue) => {
+  if (!value) return value;
+  const currentValue = value.replace(/[^\d]/g, "");
+  const cvLength = currentValue.length;
+
+  if (!previousValue || value.length > previousValue.length) {
+    if (cvLength < 4) return value;
+    if (cvLength < 7)
+      return `(${currentValue.slice(0, 3)}) ${currentValue.slice(3)}`;
+    return `(${currentValue.slice(0, 3)}) ${currentValue.slice(
+      3,
+      6
+    )}-${currentValue.slice(6, 10)}`;
+  } else {
+    return value;
+  }
+};
+
 const validate = (name, value) => {
   const regexPhone = /^(\()?[2-9]{1}\d{2}(\))?(-|\s)?[2-9]{1}\d{2}(-|\s)\d{4}$/;
 
@@ -249,6 +274,7 @@ const validate = (name, value) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: filler_alt,
   },
   avatar: {
     alignSelf: "center",
@@ -274,6 +300,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    width: "60%",
+    alignSelf: "center",
   },
   infoNoneditable: {
     flexDirection: "row",

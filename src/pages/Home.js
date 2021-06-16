@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
-  TouchableOpacity,
   ScrollView,
-  StatusBar,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
+import { primary, filler, filler_alt } from "../styles/colors";
 import firebase from "firebase";
-import EventCard from "../components/EventCard";
+import EventCard from "../components/HomePageComponents/EventCard";
 
 const Home = ({ route, navigation }) => {
   // --- State ----------------- //
@@ -137,6 +136,7 @@ const Home = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   safeView: {
     flex: 1,
+    backgroundColor: filler_alt,
     paddingTop: StatusBar.currentHeight,
   },
   container: {
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginHorizontal: 20,
+    marginBottom: 10,
   },
 });
 

@@ -7,17 +7,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import { firebaseConfig } from "./firebase";
+import { primary, primary_alt, filler_alt } from "./styles/colors";
 import Login from "./pages/Login";
-import CreateAccount from "./pages/CreateAccount";
+import CreateAccount from "./components/LoginPageComponents/CreateAccount";
 import Home from "./pages/Home";
 import Friends from "./components/FriendPageComponents/Friends";
-import Search from "./components/Search";
+import Search from "./components/SearchPageComponents/Search";
 import CreateEvent from "./components/CreateEventComponents/CreateEvent";
 import Settings from "./components/SettingsPageComponents/Settings";
-import ForgotPassword from "./components/ForgotPassword";
-import AddNewFriends from "./components/AddNewFriends";
+import ForgotPassword from "./components/LoginPageComponents/ForgotPassword";
+import AddNewFriends from "./components/FriendPageComponents/AddNewFriends";
 import EditFriends from "./components/SettingsPageComponents/EditFriends";
-import PendingFriendRequests from "./components/PendingFriendRequests";
+import PendingFriendRequests from "./components/FriendPageComponents/PendingFriendRequests";
 import FriendProfile from "./components/FriendPageComponents/FriendProfile";
 
 export default function App() {
@@ -53,13 +54,18 @@ export default function App() {
           headerTitleAlign: "left",
           headerTitleStyle: {
             fontSize: 15,
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
           },
           headerRight: () => (
             <TouchableOpacity
               onPress={() => firebase.auth().signOut()}
               style={{ maginBottom: 10, marginRight: 20 }}
             >
-              <Ionicons name={"power"} size={20} color={"black"} />
+              <Ionicons name={"power"} size={20} color={filler_alt} />
             </TouchableOpacity>
           ),
         }}
@@ -70,6 +76,13 @@ export default function App() {
         component={FriendProfile}
         options={({ route }) => ({
           title: route.params.name + "'s Profile",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
         })}
       />
     </HomeStack.Navigator>
@@ -80,7 +93,16 @@ export default function App() {
       <CreateEventStack.Screen
         name="Create Page"
         component={CreateEvent}
-        options={{ title: "Create Event" }}
+        options={{
+          title: "Create Event",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
         initialParams={{ user: authUser.email }}
       />
     </CreateEventStack.Navigator>
@@ -91,7 +113,16 @@ export default function App() {
       <SearchStack.Screen
         name="SearchStack"
         component={Search}
-        options={{ title: "Search" }}
+        options={{
+          title: "Search",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
       />
     </SearchStack.Navigator>
   );
@@ -101,24 +132,58 @@ export default function App() {
       <FriendStack.Screen
         name="FriendStack"
         component={Friends}
-        options={{ title: "Your Friends" }}
+        options={{
+          title: "Friends",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
         initialParams={{ user: authUser.email }}
       />
       <FriendStack.Screen
         name="AddNewFriends"
         component={AddNewFriends}
-        options={{ title: "Add Friends" }}
+        options={{
+          title: "Add Friends",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
       />
       <FriendStack.Screen
         name="PendingFriendRequests"
         component={PendingFriendRequests}
-        options={{ title: "Pending Friends" }}
+        options={{
+          title: "Pending Friends",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
       />
       <FriendStack.Screen
         name="FriendProfile"
         component={FriendProfile}
         options={({ route }) => ({
           title: route.params.name + "'s Profile",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
         })}
       />
     </FriendStack.Navigator>
@@ -129,13 +194,31 @@ export default function App() {
       <SettingStack.Screen
         name="ProfileSettings"
         component={Settings}
-        options={{ title: "Profile" }}
+        options={{
+          title: "Profile",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
         initialParams={{ user: authUser.email }}
       />
       <SettingStack.Screen
         name="EditFriends"
         component={EditFriends}
-        options={{ title: "Edit Friends" }}
+        options={{
+          title: "Edit Friends",
+          headerTitleStyle: {
+            color: filler_alt,
+          },
+          headerTintColor: filler_alt,
+          headerStyle: {
+            backgroundColor: primary,
+          },
+        }}
       />
     </SettingStack.Navigator>
   );
@@ -190,7 +273,7 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: "tomato",
+          activeTintColor: primary_alt,
           inactiveTintColor: "gray",
         }}
       >
@@ -212,16 +295,46 @@ export default function App() {
   ) : (
     <NavigationContainer>
       <AuthStack.Navigator>
-        <AuthStack.Screen name="Login" component={Login} />
+        <AuthStack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerTitleStyle: {
+              color: filler_alt,
+            },
+            headerTintColor: filler_alt,
+            headerStyle: {
+              backgroundColor: primary,
+            },
+          }}
+        />
         <AuthStack.Screen
           name="CreateAccount"
           component={CreateAccount}
-          options={{ title: "Create Account" }}
+          options={{
+            title: "Create Account",
+            headerTitleStyle: {
+              color: filler_alt,
+            },
+            headerTintColor: filler_alt,
+            headerStyle: {
+              backgroundColor: primary,
+            },
+          }}
         />
         <AuthStack.Screen
           name="ForgotPassword"
           component={ForgotPassword}
-          options={{ title: "Forgot Password" }}
+          options={{
+            title: "Forgot Password",
+            headerTitleStyle: {
+              color: filler_alt,
+            },
+            headerTintColor: filler_alt,
+            headerStyle: {
+              backgroundColor: primary,
+            },
+          }}
         />
       </AuthStack.Navigator>
     </NavigationContainer>
