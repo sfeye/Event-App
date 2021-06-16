@@ -7,7 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import { firebaseConfig } from "./firebase";
-import { primary, filler_alt } from "./styles/colors";
+import { primary, primary_alt, filler_alt } from "./styles/colors";
 import Login from "./pages/Login";
 import CreateAccount from "./components/LoginPageComponents/CreateAccount";
 import Home from "./pages/Home";
@@ -273,7 +273,7 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: "tomato",
+          activeTintColor: primary_alt,
           inactiveTintColor: "gray",
         }}
       >

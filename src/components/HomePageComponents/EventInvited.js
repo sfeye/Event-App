@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Avatar, Card } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import { secondary } from "../../styles/colors";
 import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
 
@@ -36,7 +37,7 @@ const EventInvited = ({ currUser, email, going, declined }) => {
       return (
         <Ionicons
           name="help-circle"
-          color="gray"
+          color={secondary}
           size={25}
           style={{ alignSelf: "center", marginLeft: "auto" }}
         />
@@ -80,6 +81,7 @@ const EventInvited = ({ currUser, email, going, declined }) => {
               rounded
               title={getInitials()}
               source={{ uri: invitedFriend[0].user.avatar }}
+              placeholderStyle={{ backgroundColor: secondary }}
               onPress={() =>
                 navigation.navigate("HomeFriendProfile", {
                   currUser: currUser,

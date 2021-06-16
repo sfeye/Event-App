@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { primary, filler_alt } from "../../styles/colors";
+import { primary, secondary, filler_alt } from "../../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Avatar, Button } from "react-native-elements";
 import firebase from "firebase";
@@ -52,6 +52,7 @@ const FriendProfile = ({ route, navigation }) => {
               rounded
               title={initials.shift().charAt(0) + initials.pop().charAt(0)}
               source={{ uri: route.params.avatar }}
+              placeholderStyle={{ backgroundColor: secondary }}
             />
           </View>
           <View style={styles.infoContainer}>
