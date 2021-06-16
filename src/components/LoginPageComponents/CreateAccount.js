@@ -173,7 +173,7 @@ const normalizeInput = (value, previousValue) => {
   const cvLength = currentValue.length;
 
   if (!previousValue || value.length > previousValue.length) {
-    if (cvLength < 4) return previousValue;
+    if (cvLength < 4) return value;
     if (cvLength < 7)
       return `(${currentValue.slice(0, 3)}) ${currentValue.slice(3)}`;
     return `(${currentValue.slice(0, 3)}) ${currentValue.slice(
