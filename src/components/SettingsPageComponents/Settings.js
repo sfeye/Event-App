@@ -7,11 +7,13 @@ import {
   Keyboard,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { secondary, filler_alt } from "../../styles/colors";
-import { Avatar, Input } from "react-native-elements";
+import { Avatar, Input, LinearProgress } from "react-native-elements";
 import firebase from "firebase";
+import * as ImagePicker from "expo-image-picker";
 
 const Settings = ({ route, navigation }) => {
   // --- State ----------------- //
@@ -22,6 +24,7 @@ const Settings = ({ route, navigation }) => {
   const [phoneInput, setPhoneInput] = useState("");
   const [touchedUser, setTouchedUser] = useState(false);
   const [touchedPhone, setTouchedPhone] = useState(false);
+  const [imgProgress, setProgress] = useState(0);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -43,6 +46,37 @@ const Settings = ({ route, navigation }) => {
   function isDisabledPhone() {
     return validate("phone", phoneInput) !== "";
   }
+
+  const setPhoneNormal = (value) => {
+    setPhoneInput(normalizeInput(value, phoneInput));
+  };
+
+  const pickImage = async () => {
+    async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    };
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      var temp = result.uri.split("/");
+      if (user[0].info.avatar !== "null") {
+        deleteImageFromStorage(user[0].info.avatar);
+      }
+      addImageToStorage(temp[temp.length - 1], result.uri);
+    }
+  };
   // --------------------------- //
 
   // --- Write DB -------------- //
@@ -67,8 +101,41 @@ const Settings = ({ route, navigation }) => {
     });
   };
 
-  const setPhoneNormal = (value) => {
-    setPhoneInput(normalizeInput(value, phoneInput));
+  const deleteImageFromStorage = async (prevUrl) => {
+    var ref = firebase.storage().refFromURL(prevUrl);
+    ref.delete();
+  };
+
+  const addImageToStorage = async (fileName, uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const uploadTask = firebase.storage().ref(`images/${fileName}`).put(blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress / 100);
+      },
+      (error) => {
+        alert(error.message);
+      },
+      () => {
+        firebase
+          .storage()
+          .ref("images")
+          .child(fileName)
+          .getDownloadURL()
+          .then((url) => {
+            firebase.firestore().collection("users").doc(user[0].id).update({
+              avatar: url,
+            });
+          });
+      }
+    );
   };
   // --------------------------- //
 
@@ -94,6 +161,15 @@ const Settings = ({ route, navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
+        {imgProgress !== 0 && imgProgress !== 1 ? (
+          <LinearProgress
+            value={imgProgress}
+            color="primary"
+            variant="determinate"
+          />
+        ) : (
+          <React.Fragment />
+        )}
         {user ? (
           user.map(({ id, info }) => (
             <View key={id}>
@@ -104,6 +180,7 @@ const Settings = ({ route, navigation }) => {
                   title={getInitials(info.name)}
                   source={{ uri: info.avatar }}
                   placeholderStyle={{ backgroundColor: secondary }}
+                  onPress={pickImage}
                 />
               </View>
               <View style={styles.infoContainer}>
