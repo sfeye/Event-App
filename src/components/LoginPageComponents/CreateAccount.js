@@ -45,7 +45,6 @@ const CreateAccount = ({ navigation }) => {
   }
 
   const setPhoneNormal = (value) => {
-    console.log(value);
     setPhoneNumber(normalizeInput(value, phoneNumber));
   };
   // --------------------------- //

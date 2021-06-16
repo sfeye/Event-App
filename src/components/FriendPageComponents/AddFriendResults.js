@@ -23,10 +23,6 @@ const AddFriendResults = ({ currentUser, otherUsers }) => {
     return currFriends.includes(otherEmail);
   }
 
-  useEffect(() => {
-    console.log(otherUsers);
-  }, []);
-
   return (
     <View>
       {otherUsers
