@@ -1,19 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator,
-  TouchableOpacity,
 } from "react-native";
+import { primary, filler_alt } from "../../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar, Input } from "react-native-elements";
+import { Avatar, Button } from "react-native-elements";
 import firebase from "firebase";
 
 const FriendProfile = ({ route, navigation }) => {
   const initials = route.params.name.split(" ");
+
+  // --- Helpers --------------- //
+  function arrayRemove(arr, value) {
+    return arr.filter(function (ele) {
+      return ele != value;
+    });
+  }
+  // --------------------------- //
+
+  // --- Write DB -------------- //
+  const addFriend = () => {
+    var newPending = route.params.pendingArr;
+    newPending.push(route.params.currUser);
+
+    firebase.firestore().collection("users").doc(route.params.id).update({
+      pending: newPending,
+    });
+  };
+
+  const cancelRequest = () => {
+    var newPending = route.params.pendingArr;
+    newPending = arrayRemove(newPending, route.params.currUser);
+
+    firebase.firestore().collection("users").doc(route.params.id).update({
+      pending: newPending,
+    });
+  };
+  // --------------------------- //
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -37,6 +64,40 @@ const FriendProfile = ({ route, navigation }) => {
             <View style={styles.infoEditable}>
               <Text style={styles.infoOther}>{route.params.phone}</Text>
             </View>
+            {!route.params.pendingArr.includes(route.params.currUser) &&
+            !route.params.friendArr.includes(route.params.currUser) ? (
+              <Button
+                style={styles.btn}
+                buttonStyle={{ backgroundColor: primary }}
+                icon={
+                  <Ionicons
+                    name="person-add"
+                    size={15}
+                    color="white"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                title="Add Friend"
+                onPress={() => addFriend()}
+              />
+            ) : route.params.pendingArr.includes(route.params.currUser) ? (
+              <Button
+                style={styles.btn}
+                buttonStyle={{ backgroundColor: primary }}
+                icon={
+                  <Ionicons
+                    name="ban"
+                    size={15}
+                    color="white"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                title="Cancel Request"
+                onPress={() => cancelRequest()}
+              />
+            ) : (
+              <React.Fragment />
+            )}
           </View>
         </View>
       </View>
@@ -47,6 +108,7 @@ const FriendProfile = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: filler_alt,
   },
   avatar: {
     alignSelf: "center",
@@ -79,6 +141,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 40,
     marginTop: 10,
+  },
+  btn: {
+    marginTop: 20,
+    width: "50%",
+    alignSelf: "center",
   },
 });
 

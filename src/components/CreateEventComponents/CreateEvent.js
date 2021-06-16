@@ -9,7 +9,10 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
+import { primary, secondary, filler_alt } from "../../styles/colors";
+import { Ionicons } from "@expo/vector-icons";
 import { Button, Input, Icon, Overlay } from "react-native-elements";
+
 import firebase from "firebase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import InviteFriendCard from "./InviteFriendCard";
@@ -210,12 +213,28 @@ const CreateEvent = ({ route, navigation }) => {
         <View>
           <View style={styles.datePickers}>
             <Button
-              icon={<Icon name="event" size={15} color="white" />}
+              buttonStyle={{ backgroundColor: primary }}
+              icon={
+                <Icon
+                  name="event"
+                  size={20}
+                  color="white"
+                  style={{ marginRight: 5 }}
+                />
+              }
               title="Pick a date"
               onPress={() => showDatepicker()}
             />
             <Button
-              icon={<Icon name="schedule" size={15} color="white" />}
+              buttonStyle={{ backgroundColor: primary }}
+              icon={
+                <Icon
+                  name="schedule"
+                  size={20}
+                  color="white"
+                  style={{ marginRight: 5 }}
+                />
+              }
               title="Pick a time"
               onPress={() => showTimepicker()}
             />
@@ -238,19 +257,37 @@ const CreateEvent = ({ route, navigation }) => {
           style={styles.inviteFriends}
           onPress={() => setOpen(true)}
         >
-          <Text>+Friends {friends.length}</Text>
+          <Text style={{ color: filler_alt, fontWeight: "700" }}>
+            + Friends {friends.length}
+          </Text>
         </TouchableOpacity>
 
         <Button
           style={styles.createBtn}
-          icon={<Icon name="input" size={15} color="white" />}
+          buttonStyle={{ backgroundColor: primary }}
+          icon={
+            <Ionicons
+              name="add-circle"
+              size={20}
+              color="white"
+              style={{ marginRight: 5 }}
+            />
+          }
           title="Create Event"
           onPress={() => createEvent()}
           disabled={loading || isDisabled()}
         />
         <Button
           style={styles.createBtn}
-          icon={<Icon name="input" size={15} color="white" />}
+          buttonStyle={{ backgroundColor: primary }}
+          icon={
+            <Ionicons
+              name="refresh-circle"
+              size={20}
+              color="white"
+              style={{ marginRight: 5 }}
+            />
+          }
           title="Reset"
           onPress={() => resetState()}
           disabled={loading}
@@ -279,7 +316,7 @@ const validate = (name, value) => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: "#fff",
+    backgroundColor: filler_alt,
   },
   title: {
     fontSize: 15,
@@ -289,9 +326,10 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    marginTop: "5%",
+    paddingTop: "5%",
     flex: 1,
     height: "100%",
+    backgroundColor: filler_alt,
   },
   input: {
     margin: 5,
@@ -303,7 +341,7 @@ const styles = StyleSheet.create({
   },
   inviteFriends: {
     alignSelf: "center",
-    backgroundColor: "#c8f7c8",
+    backgroundColor: secondary,
     padding: 10,
     borderRadius: 20,
     marginTop: 25,

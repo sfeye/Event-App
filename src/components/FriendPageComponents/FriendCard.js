@@ -3,7 +3,18 @@ import { StyleSheet, Text, View } from "react-native";
 import { Card, Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 
-const FriendCard = ({ name, email, avatar, phone, friendArr, screenToNav }) => {
+const FriendCard = ({
+  currUser,
+  id,
+  name,
+  email,
+  avatar,
+  phone,
+  friendLength,
+  friendArr,
+  pendingArr,
+  screenToNav,
+}) => {
   const navigation = useNavigation();
   const initials = name.split(" ");
 
@@ -18,11 +29,14 @@ const FriendCard = ({ name, email, avatar, phone, friendArr, screenToNav }) => {
             source={{ uri: avatar }}
             onPress={() =>
               navigation.navigate(screenToNav, {
+                currUser: currUser,
+                id: id,
                 name: name,
                 email: email,
                 avatar: avatar,
                 phone: phone,
                 friendArr: friendArr,
+                pendingArr: pendingArr,
               })
             }
           />
@@ -30,7 +44,7 @@ const FriendCard = ({ name, email, avatar, phone, friendArr, screenToNav }) => {
           <Text>{email}</Text>
           <Text>{phone}</Text>
           <Text>
-            {name} has {friendArr} friend(s)
+            {name} has {friendLength} friend(s)
           </Text>
         </View>
       </Card>

@@ -49,6 +49,7 @@ const Friends = ({ route, navigation }) => {
                   ? user.friends.map((friend) => (
                       <FriendCards
                         key={id + friend}
+                        currUser={route.params.user}
                         friendEmail={friend}
                         screenToNav="FriendProfile"
                       />

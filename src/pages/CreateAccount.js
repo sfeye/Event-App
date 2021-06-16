@@ -43,6 +43,11 @@ const CreateAccount = ({ navigation }) => {
       validate("phone", phoneNumber) !== ""
     );
   }
+
+  const setPhoneNormal = (value) => {
+    console.log(value);
+    setPhoneNumber(normalizeInput(value, phoneNumber));
+  };
   // --------------------------- //
 
   //add new user to users collection
@@ -129,7 +134,8 @@ const CreateAccount = ({ navigation }) => {
             placeholder="Phone Number"
             value={phoneNumber}
             placeholderTextColor="#003f5c"
-            onChangeText={setPhoneNumber}
+            onChangeText={setPhoneNormal}
+            keyboardType="numeric"
             onFocus={() => setTouchedPhone(true)}
             errorMessage={touchedPhone ? validate("phone", phoneNumber) : ""}
           />
@@ -159,6 +165,24 @@ const CreateAccount = ({ navigation }) => {
       </View>
     </TouchableWithoutFeedback>
   );
+};
+
+const normalizeInput = (value, previousValue) => {
+  if (!value) return value;
+  const currentValue = value.replace(/[^\d]/g, "");
+  const cvLength = currentValue.length;
+
+  if (!previousValue || value.length > previousValue.length) {
+    if (cvLength < 4) return previousValue;
+    if (cvLength < 7)
+      return `(${currentValue.slice(0, 3)}) ${currentValue.slice(3)}`;
+    return `(${currentValue.slice(0, 3)}) ${currentValue.slice(
+      3,
+      6
+    )}-${currentValue.slice(6, 10)}`;
+  } else {
+    return value;
+  }
 };
 
 const validate = (name, value) => {
@@ -195,7 +219,7 @@ const validate = (name, value) => {
       if (value === "") {
         return "A phone number is required";
       } else if (!regexPhone.test(String(value).toLowerCase())) {
-        return "Invalid phone number format";
+        return "Invalid phone number";
       }
       break;
   }
