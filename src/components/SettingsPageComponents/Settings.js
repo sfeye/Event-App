@@ -69,8 +69,8 @@ const Settings = ({ route, navigation }) => {
       quality: 1,
     });
 
-    var temp = result.uri.split("/");
     if (!result.cancelled) {
+      var temp = result.uri.split("/");
       if (user[0].info.avatar !== "null") {
         deleteImageFromStorage(user[0].info.avatar);
       }
