@@ -33,46 +33,6 @@ const Home = ({ route, navigation }) => {
     }
     return false;
   }
-
-  function processDate(datetime) {
-    var temp = new Date(datetime.seconds * 1000);
-    return (
-      temp.getMonth() + 1 + "/" + temp.getDate() + "/" + temp.getFullYear()
-    );
-  }
-
-  function processTime(datetime) {
-    var temp = new Date(datetime.seconds * 1000);
-    return (
-      processHour(temp.getHours()) +
-      ":" +
-      temp.getMinutes().toString().padEnd(2, "0") +
-      " " +
-      processAMPM(temp.getHours())
-    );
-  }
-
-  function processHour(hour) {
-    if (hour === "24") {
-      return "12";
-    } else if (hour < 13) {
-      return hour;
-    } else {
-      return hour - 12;
-    }
-  }
-
-  function processAMPM(hour) {
-    if (hour === 12) {
-      return "PM";
-    } else if (hour === 24) {
-      return "AM";
-    } else if (hour < 13) {
-      return "AM";
-    } else {
-      return "PM";
-    }
-  }
   // --------------------------- //
 
   // --- Read DB --------------- //
@@ -112,8 +72,8 @@ const Home = ({ route, navigation }) => {
                   eventId={id}
                   postedBy={eventCard.email}
                   location={eventCard.location}
-                  date={processDate(eventCard.datetime)}
-                  time={processTime(eventCard.datetime)}
+                  date={eventCard.datetime}
+                  time={eventCard.datetime}
                   description={eventCard.description}
                   invitedFriends={eventCard.friends}
                   accepted={eventCard.accepted}
