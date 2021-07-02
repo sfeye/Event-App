@@ -61,6 +61,13 @@ const AddNewFriends = ({ route, navigation }) => {
         placeholder="Search friends.."
         onChangeText={setInputText}
         value={inputText}
+        containerStyle={{
+          backgroundColor: "#46B1C9",
+          borderWidth: 0,
+          borderTopColor: "#46B1C9",
+          borderBottomColor: "#46B1C9",
+        }}
+        inputContainerStyle={{ backgroundColor: "#fff" }}
       />
       {friends && inputText ? (
         <AddFriendResults

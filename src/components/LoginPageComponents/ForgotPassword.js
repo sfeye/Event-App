@@ -44,9 +44,9 @@ const ForgotPassword = ({ navigation }) => {
               errorMessage={touched ? validate(email) : ""}
             />
           </View>
-          <View style={styles.subContainer}>
+          <View>
             <Button
-              style={styles.textInput}
+              buttonStyle={styles.btnStyle}
               icon={<Icon name="input" size={15} color="white" />}
               title="Reset"
               onPress={() => reset()}
@@ -91,8 +91,9 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     padding: 5,
-    marginTop: 30,
+    marginTop: 10,
     width: 300,
+    alignItems: "center",
   },
   activity: {
     position: "absolute",
@@ -103,8 +104,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  textInput: {
-    fontSize: 18,
+  btnStyle: {
+    width: "100%",
+    backgroundColor: "#46B1C9",
+    marginTop: 20,
   },
 });
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { Button, Avatar } from "react-native-elements";
 import firebase from "firebase";
 
 const PendingFriendRequests = ({ route, navigation }) => {
@@ -14,11 +15,11 @@ const PendingFriendRequests = ({ route, navigation }) => {
   const acceptFriendRequest = (
     currUserFriendList,
     currPendingList,
-    newFriendEmail,
+    newFriendId,
     currentUserId,
     currentUserEmail
   ) => {
-    var otherUser = getOtherUser(newFriendEmail);
+    var otherUser = getOtherUser(newFriendId);
 
     // Set temp arrays
     var tempCurrUserFriendList = currUserFriendList;
@@ -26,8 +27,8 @@ const PendingFriendRequests = ({ route, navigation }) => {
     var tempOtherUserFriendList = otherUser.u.friends;
 
     // Modify temp arrays
-    tempCurrUserFriendList.push(newFriendEmail);
-    tempCurrPendingList = arrayRemove(tempCurrPendingList, newFriendEmail);
+    tempCurrUserFriendList.push(otherUser.u.email);
+    tempCurrPendingList = arrayRemove(tempCurrPendingList, newFriendId);
     tempOtherUserFriendList.push(currentUserEmail);
 
     // Update friends list and pending list of current user
@@ -57,9 +58,39 @@ const PendingFriendRequests = ({ route, navigation }) => {
     });
   };
 
-  function getOtherUser(otherUserEmail) {
+  const declineFriendRequest = (
+    currPendingList,
+    newFriendId,
+    currentUserId
+  ) => {
+    var tempCurrPendingList = currPendingList;
+    //new pending list by removing pending friend after declining
+    tempCurrPendingList = arrayRemove(tempCurrPendingList, newFriendId);
+
+    updatePendingListOnDecline(currentUserId, tempCurrPendingList);
+  };
+
+  const updatePendingListOnDecline = (currentUserId, newPendingList) => {
+    firebase.firestore().collection("users").doc(currentUserId).update({
+      pending: newPendingList,
+    });
+  };
+
+  function displayOtherUser(otherUserId) {
     for (var i = 0; i < user.length; i++) {
-      if (user[i].u.email === otherUserEmail) {
+      if (user[i].id === otherUserId) {
+        return {
+          name: user[i].u.name,
+          avatar: user[i].u.avatar,
+        };
+      }
+    }
+    return {};
+  }
+
+  function getOtherUser(otherUserId) {
+    for (var i = 0; i < user.length; i++) {
+      if (user[i].id === otherUserId) {
         return user[i];
       }
     }
@@ -85,36 +116,93 @@ const PendingFriendRequests = ({ route, navigation }) => {
   }, []);
 
   return (
-    <View>
-      {user ? (
-        user.map(({ id, u }) =>
-          u.pending.map((pendingFriend) =>
-            u.email === route.params.currentUser ? (
-              <View key={id + pendingFriend}>
-                <Text>{pendingFriend}</Text>
-                <Button
-                  title="Accept"
-                  onPress={() =>
-                    acceptFriendRequest(
-                      u.friends,
-                      u.pending,
-                      pendingFriend,
-                      id,
-                      route.params.currentUser
-                    )
-                  }
-                ></Button>
-              </View>
-            ) : (
-              <React.Fragment key={id + pendingFriend} />
+    <ScrollView style={{ height: "100%" }}>
+      <View>
+        {user ? (
+          user.map(({ id, u }) =>
+            u.pending.map((pendingFriend) =>
+              u.email === route.params.currentUser ? (
+                <View key={id + pendingFriend} style={styles.pendingFriendItem}>
+                  <View>
+                    <Avatar
+                      size="medium"
+                      rounded
+                      title={displayOtherUser(pendingFriend).name}
+                      source={{ uri: displayOtherUser(pendingFriend).avatar }}
+                      placeholderStyle={{ backgroundColor: "gray" }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        marginBottom: 5,
+                        marginLeft: 10,
+                        fontSize: 15,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {displayOtherUser(pendingFriend).name}
+                    </Text>
+                    <View style={styles.accDecView}>
+                      <Button
+                        buttonStyle={styles.accBtn}
+                        title="Accept"
+                        titleStyle={{ fontSize: 15, fontWeight: "600" }}
+                        onPress={() =>
+                          acceptFriendRequest(
+                            u.friends,
+                            u.pending,
+                            pendingFriend,
+                            id,
+                            route.params.currentUser
+                          )
+                        }
+                      />
+                      <Button
+                        buttonStyle={styles.decBtn}
+                        title="Decline"
+                        titleStyle={{ fontSize: 15, fontWeight: "600" }}
+                        onPress={() =>
+                          declineFriendRequest(u.pending, pendingFriend, id)
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              ) : (
+                <React.Fragment key={id + pendingFriend} />
+              )
             )
           )
-        )
-      ) : (
-        <React.Fragment />
-      )}
-    </View>
+        ) : (
+          <React.Fragment />
+        )}
+      </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  pendingFriendItem: {
+    alignItems: "center",
+    //width: "80%",
+    //backgroundColor: "#46B1C9",
+    flexDirection: "row",
+    margin: 10,
+  },
+  accDecView: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginLeft: 10,
+  },
+  accBtn: {
+    backgroundColor: "#46B1C9",
+    marginRight: 5,
+  },
+  decBtn: {
+    backgroundColor: "red",
+    marginLeft: 5,
+  },
+});
 
 export default PendingFriendRequests;

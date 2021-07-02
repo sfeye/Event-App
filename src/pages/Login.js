@@ -10,7 +10,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Button, Input, Icon } from "react-native-elements";
+import { Button, Input } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "firebase";
 
 const Login = ({ navigation }) => {
@@ -51,10 +53,11 @@ const Login = ({ navigation }) => {
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
 
-        <View style={styles.inputView}>
+        <View style={styles.inputEmail}>
           <Input
+            leftIcon={<Icon name="user" size={20} color="#9FB7B9" />}
             style={styles.inputText}
-            placeholder="Email..."
+            placeholder="Email"
             value={email}
             placeholderTextColor="#003f5c"
             onChangeText={setEmail}
@@ -62,8 +65,9 @@ const Login = ({ navigation }) => {
             onFocus={() => setTouchedEmail(true)}
           />
         </View>
-        <View style={styles.inputView}>
+        <View style={styles.inputPwd}>
           <Input
+            leftIcon={<Icon name="lock" size={20} color="#9FB7B9" />}
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
@@ -75,28 +79,88 @@ const Login = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.push("ForgotPassword")}>
-          <Text style={styles.forgot}>Forgot password?</Text>
-        </TouchableOpacity>
+        <View style={{ width: "80%" }}>
+          <TouchableOpacity
+            style={{ marginLeft: "auto" }}
+            onPress={() => navigation.push("ForgotPassword")}
+          >
+            <Text style={styles.forgot}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          style={styles.signin}
-          onPress={() => signInWithEmail()}
+        <View
+          style={{
+            width: "80%",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
         >
-          {loading ? (
-            <ActivityIndicator color="#fff" size="large" />
-          ) : (
-            <Text style={styles.signintext}>Sign In</Text>
-          )}
-        </TouchableOpacity>
+          <Button
+            icon={
+              <Ionicons
+                name="log-in"
+                size={25}
+                color={"white"}
+                style={{ marginRight: 5 }}
+              />
+            }
+            buttonStyle={styles.signin}
+            onPress={() => signInWithEmail()}
+            title={
+              loading ? (
+                <ActivityIndicator color="#fff" size="large" />
+              ) : (
+                "Sign In"
+              )
+            }
+          />
 
-        <TouchableOpacity
-          style={styles.signup}
-          title="Sign Up"
-          onPress={() => navigation.push("CreateAccount")}
-        >
-          <Text style={styles.signuptext}>Sign Up</Text>
-        </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%",
+              padding: 10,
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                height: 1,
+                backgroundColor: "#9FB7B9",
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginLeft: 5,
+                  marginRight: 5,
+                  color: "#9FB7B9",
+                  fontWeight: "600",
+                }}
+              >
+                or
+              </Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: "#9FB7B9" }} />
+          </View>
+          <Button
+            icon={
+              <Ionicons
+                name="person-add"
+                size={20}
+                color={"white"}
+                style={{ marginRight: 5 }}
+              />
+            }
+            buttonStyle={styles.signup}
+            title="Sign Up"
+            onPress={() => navigation.push("CreateAccount")}
+            title="Sign Up"
+          />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -128,11 +192,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
     zIndex: 0,
   },
   logo: {
-    position: "absolute",
     top: 0,
   },
   error: {
@@ -142,21 +204,13 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   signin: {
-    alignItems: "center",
-    backgroundColor: "#add8e6",
-    width: 150,
-    padding: 10,
-    borderRadius: 5,
-    margin: 10,
-  },
-  signintext: { fontSize: 25 },
-  signuptext: {
-    fontSize: 18,
-    color: "blue",
+    width: "100%",
+    backgroundColor: "#46B1C9",
+    marginTop: 20,
   },
   signup: {
-    alignItems: "center",
-    padding: 10,
+    width: "100%",
+    backgroundColor: "#9FB7B9",
   },
   inputText: {
     height: 50,
@@ -164,19 +218,41 @@ const styles = StyleSheet.create({
   },
   forgot: {
     color: "blue",
-    fontSize: 15,
+    fontSize: 13,
+    marginLeft: "auto",
+    color: "#9FB7B9",
+    fontWeight: "700",
   },
   inputView: {
     width: "80%",
-    backgroundColor: "yellow",
-    borderRadius: 25,
+    backgroundColor: "white",
     height: 50,
-    marginBottom: 20,
+    marginBottom: 10,
     justifyContent: "center",
-    padding: 20,
+  },
+  inputEmail: {
+    width: "80%",
+    backgroundColor: "white",
+    height: 50,
+    marginBottom: 10,
+    justifyContent: "center",
+  },
+  inputPwd: {
+    width: "80%",
+    backgroundColor: "white",
+    height: 50,
+    justifyContent: "center",
   },
   scrollView: {
     backgroundColor: "white",
+  },
+  orText: {
+    fontSize: 15,
+    color: "gray",
+    textAlign: "center",
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    lineHeight: 1,
   },
 });
 
