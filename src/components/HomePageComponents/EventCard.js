@@ -310,7 +310,13 @@ const EventCard = ({
         </ScrollView>
       </Overlay>
 
-      <Card containerStyle={{ backgroundColor: filler_alt }}>
+      <Card
+        containerStyle={{
+          backgroundColor: filler_alt,
+          width: "100%",
+          alignSelf: "center",
+        }}
+      >
         <View style={styles.header}>
           <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
           {isPostedBy ? (
