@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  StatusBar,
 } from "react-native";
 import { primary, secondary, filler_alt } from "../../styles/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -168,6 +169,7 @@ const CreateEvent = ({ route, navigation }) => {
           isVisible={open}
           onBackdropPress={() => setOpen(!open)}
           fullScreen
+          overlayStyle={{ marginTop: StatusBar.currentHeight + 100 }}
         >
           <TouchableOpacity style={styles.exit} onPress={() => setOpen(false)}>
             <Icon name="cancel" size={25} color="black" />

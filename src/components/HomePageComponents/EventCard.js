@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { secondary, filler_alt } from "../../styles/colors";
-import { Overlay, Card } from "react-native-elements";
+import { secondary, filler_alt, primary } from "../../styles/colors";
+import { Overlay, Card, Input, Button, Icon } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import { useNavigation } from "@react-navigation/native";
 import EventInvited from "./EventInvited";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const EventCard = ({
   username,
@@ -32,8 +33,17 @@ const EventCard = ({
   // --- State ----------------- //
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [invite, setInvite] = useState(false);
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("date");
   const [going, setGoing] = useState(active1);
   const [notGoing, setNotGoing] = useState(active2);
+  // --- Edit ------------------ //
+  const [eLocation, setLocation] = useState(location);
+  const [eDate, setDate] = useState(new Date(date.seconds * 1000));
+  const [eTime, setTime] = useState(new Date(time.seconds * 1000));
+  const [eDescription, setDescription] = useState(description);
   // --------------------------- //
 
   // --- Helpers --------------- //
@@ -71,6 +81,64 @@ const EventCard = ({
     setGoing(false);
     setNotGoing(true);
   };
+
+  const onChangeDate = (event, selectedDate) => {
+    setShow(Platform.OS === "ios");
+    mode === "date" ? setDate(selectedDate) : setTime(selectedDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
+
+  function processDate(datetime) {
+    var temp = new Date(datetime.seconds * 1000);
+    return (
+      temp.getMonth() + 1 + "/" + temp.getDate() + "/" + temp.getFullYear()
+    );
+  }
+
+  function processTime(datetime) {
+    var temp = new Date(datetime.seconds * 1000);
+    return (
+      processHour(temp.getHours()) +
+      ":" +
+      temp.getMinutes().toString().padEnd(2, "0") +
+      " " +
+      processAMPM(temp.getHours())
+    );
+  }
+
+  function processHour(hour) {
+    if (hour === "24") {
+      return "12";
+    } else if (hour < 13) {
+      return hour;
+    } else {
+      return hour - 12;
+    }
+  }
+
+  function processAMPM(hour) {
+    if (hour === 12) {
+      return "PM";
+    } else if (hour === 24) {
+      return "AM";
+    } else if (hour < 13) {
+      return "AM";
+    } else {
+      return "PM";
+    }
+  }
   // --------------------------- //
 
   // --- Write DB --------------- //
@@ -90,7 +158,26 @@ const EventCard = ({
       .doc(eventId)
       .delete()
       .then(() => {
-        alert("Success!");
+        alert("Event was deleted!");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  const updateEvent = () => {
+    firebase
+      .firestore()
+      .collection("events")
+      .doc(eventId)
+      .update({
+        description: eDescription,
+        location: eLocation,
+        date: eDate,
+        time: eTime,
+      })
+      .then(() => {
+        setEdit(false);
       })
       .catch((error) => {
         alert(error);
@@ -103,11 +190,108 @@ const EventCard = ({
     const unsubscribe = navigation.addListener("blur", () => {
       setOpen(false);
     });
+    return () => {
+      unsubscribe();
+    };
   });
   // --------------------------- //
 
   return (
     <View style={styles.container}>
+      <Overlay
+        isVisible={edit}
+        overlayStyle={styles.overlayEdit}
+        onBackdropPress={() => setEdit(!edit)}
+      >
+        <ScrollView>
+          <Input
+            style={styles.input}
+            onChangeText={setDescription}
+            leftIcon={<Ionicons name="document-text" size={24} color="gray" />}
+            placeholder="Name or description"
+            value={eDescription}
+          />
+          <Input
+            style={styles.input}
+            leftIcon={<Ionicons name="location" size={24} color="gray" />}
+            onChangeText={setLocation}
+            placeholder="Location"
+            value={eLocation}
+          />
+          <View style={styles.datePickers}>
+            <Button
+              buttonStyle={{ backgroundColor: primary }}
+              icon={
+                <Icon
+                  name="event"
+                  size={20}
+                  color="white"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              title="Pick a date"
+              raised
+              onPress={() => showDatepicker()}
+            />
+            <Button
+              buttonStyle={{ backgroundColor: primary }}
+              icon={
+                <Icon
+                  name="schedule"
+                  size={20}
+                  color="white"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              title="Pick a time"
+              raised
+              onPress={() => showTimepicker()}
+            />
+          </View>
+          <View style={styles.picker}>
+            {show && (
+              <DateTimePicker
+                testID="datePicker"
+                value={mode === "date" ? eDate : eTime}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChangeDate}
+              />
+            )}
+          </View>
+
+          <Button
+            style={styles.createBtn}
+            buttonStyle={{ backgroundColor: primary }}
+            icon={
+              <Ionicons
+                name="repeat"
+                size={20}
+                color="white"
+                style={{ marginRight: 5 }}
+              />
+            }
+            title="Update Event"
+            onPress={() => updateEvent()}
+          />
+          <Button
+            style={styles.createBtn}
+            buttonStyle={{ backgroundColor: primary }}
+            icon={
+              <Ionicons
+                name="close-circle"
+                size={20}
+                color="white"
+                style={{ marginRight: 5 }}
+              />
+            }
+            title="Cancel"
+            onPress={() => setEdit(false)}
+          />
+        </ScrollView>
+      </Overlay>
+
       <Overlay
         isVisible={open}
         overlayStyle={styles.overlay}
@@ -126,13 +310,31 @@ const EventCard = ({
         </ScrollView>
       </Overlay>
 
-      <Card containerStyle={{ backgroundColor: filler_alt }}>
+      <Card
+        containerStyle={{
+          backgroundColor: filler_alt,
+          width: "100%",
+          alignSelf: "center",
+        }}
+      >
         <View style={styles.header}>
           <Text style={styles.postedBy}>Posted by: {postedBy}</Text>
           {isPostedBy ? (
-            <TouchableOpacity onPress={() => deleteEvent()} disabled={loading}>
-              <Ionicons name={"trash"} size={20} color={"red"} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                onPress={() => setEdit(true)}
+                disabled={loading}
+                style={{ marginRight: 10 }}
+              >
+                <Ionicons name={"create"} size={20} color={"gray"} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => deleteEvent()}
+                disabled={loading}
+              >
+                <Ionicons name={"trash"} size={20} color={"red"} />
+              </TouchableOpacity>
+            </View>
           ) : (
             <React.Fragment />
           )}
@@ -160,7 +362,7 @@ const EventCard = ({
             style={{ marginRight: 5 }}
           />
           <Text style={styles.dateTime}>
-            {date} at {time}
+            {processDate(date)} at {processTime(time)}
           </Text>
         </View>
 
@@ -222,6 +424,11 @@ const styles = StyleSheet.create({
     maxWidth: "50%",
     alignSelf: "flex-start",
   },
+  createBtn: {
+    margin: 10,
+    alignSelf: "center",
+    width: "60%",
+  },
   postedBy: {
     fontWeight: "600",
     alignSelf: "center",
@@ -234,8 +441,21 @@ const styles = StyleSheet.create({
   },
   description: {},
   overlay: {
-    width: "80%",
-    height: "80%",
+    width: "90%",
+    height: "50%",
+  },
+  inviteFriends: {
+    alignSelf: "center",
+    backgroundColor: secondary,
+    padding: 10,
+    borderRadius: 20,
+    marginTop: 25,
+    marginBottom: 25,
+  },
+  overlayEdit: {
+    width: "90%",
+    padding: 20,
+    alignContent: "center",
   },
   // --- Accept/Decline BTNS --- //
   btnContainer: {
@@ -281,6 +501,14 @@ const styles = StyleSheet.create({
   },
   declineBoldTxt: {
     fontWeight: "600",
+  },
+  datePickers: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  picker: {
+    marginTop: 20,
+    marginLeft: "35%",
   },
   // --------------------------- //
 });
