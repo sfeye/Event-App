@@ -8,6 +8,8 @@ import {
   Keyboard,
 } from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
+//import {Icon} from '"react-native-vector-icons/FontAwesome"'
 import firebase from "firebase";
 
 const CreateAccount = ({ navigation }) => {
@@ -95,6 +97,7 @@ const CreateAccount = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.inputView}>
           <Input
+            leftIcon={<Ionicons name="person" size={20} color="#9FB7B9" />}
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
@@ -106,6 +109,7 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
+            leftIcon={<Ionicons name="mail" size={20} color="#9FB7B9" />}
             style={styles.inputText}
             placeholder="Email"
             value={email}
@@ -117,6 +121,7 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
+            leftIcon={<Ionicons name="lock-closed" size={20} color="#9FB7B9" />}
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
@@ -129,6 +134,7 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
+            leftIcon={<Ionicons name="call" size={20} color="#9FB7B9" />}
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}
@@ -146,9 +152,14 @@ const CreateAccount = ({ navigation }) => {
           <Button
             style={styles.signup}
             onPress={() => signUpWithEmail()}
-            icon={<Icon name="input" size={15} color="white" />}
+            icon={
+              <Ionicons
+                name="person-add-outline"
+                size={15}
+                color={isDisabled() ? "gray" : "white"}
+              />
+            }
             disabled={isDisabled()}
-            raised
             title="Create Account"
           />
         )}
@@ -237,7 +248,6 @@ const styles = StyleSheet.create({
   signup: {
     alignItems: "center",
     width: 200,
-    padding: 10,
     borderRadius: 5,
     margin: 10,
   },
@@ -247,8 +257,8 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   inputView: {
-    width: "80%",
-    backgroundColor: "yellow",
+    width: "100%",
+    backgroundColor: "white",
     borderRadius: 25,
     height: 50,
     marginBottom: 20,

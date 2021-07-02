@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
+import { Icon, Badge, withBadge } from "react-native-elements";
 import firebase from "firebase";
 import { firebaseConfig } from "./firebase";
 import { primary, primary_alt, filler_alt } from "./styles/colors";
@@ -22,6 +23,16 @@ import PendingFriendRequests from "./components/FriendPageComponents/PendingFrie
 import FriendProfile from "./components/FriendPageComponents/FriendProfile";
 
 export default function App() {
+  const [userData, setUserData] = useState();
+  const BadgedIcon = withBadge(userData ? userData[0].user.pending.length : 0, {
+    badgeStyle: { top: -1 },
+    textStyle: { fontSize: 8 },
+    hidden: userData
+      ? userData[0].user.pending.length === 0
+        ? true
+        : false
+      : true,
+  })(Icon);
   // --- Initialize Firebase --- //
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -37,10 +48,28 @@ export default function App() {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       user ? setUser(user) : setUser(null);
     });
+
     return () => {
       unsubscribe();
     };
   });
+
+  useEffect(() => {
+    authUser
+      ? firebase
+          .firestore()
+          .collection("users")
+          .where("email", "==", authUser.email)
+          .onSnapshot((snapshot) => {
+            setUserData(
+              snapshot.docs.map((doc) => ({
+                id: doc.id,
+                user: doc.data(),
+              }))
+            );
+          })
+      : setUserData(undefined);
+  }, [authUser]);
   // --------------------------- //
 
   // --- Stacks ---------------- //
@@ -132,7 +161,7 @@ export default function App() {
       <FriendStack.Screen
         name="FriendStack"
         component={Friends}
-        options={{
+        options={({ navigation }) => ({
           title: "Friends",
           headerTitleStyle: {
             color: filler_alt,
@@ -141,7 +170,41 @@ export default function App() {
           headerStyle: {
             backgroundColor: primary,
           },
-        }}
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push("AddNewFriends", {
+                  currentUser: authUser.email,
+                })
+              }
+              style={{ maginBottom: 10, marginLeft: 20 }}
+            >
+              <Icon
+                name={"user-plus"}
+                type="font-awesome-5"
+                size={20}
+                color={filler_alt}
+              />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push("PendingFriendRequests", {
+                  currentUser: authUser.email,
+                })
+              }
+              style={{ maginBottom: 10, marginRight: 20 }}
+            >
+              <BadgedIcon
+                type="font-awesome-5"
+                name="user-clock"
+                size={20}
+                color={filler_alt}
+              />
+            </TouchableOpacity>
+          ),
+        })}
         initialParams={{ user: authUser.email }}
       />
       <FriendStack.Screen
@@ -263,9 +326,10 @@ export default function App() {
               );
             } else if (route.name === "Friends") {
               return (
-                <Ionicons
+                <BadgedIcon
+                  type="ionicons"
                   name={focused ? "people" : "people-outline"}
-                  size={size}
+                  size={30}
                   color={color}
                 />
               );

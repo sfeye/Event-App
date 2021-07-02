@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { filler_alt } from "../../styles/colors";
+import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import FriendCards from "./FriendCards";
 
@@ -59,10 +60,12 @@ const Friends = ({ route, navigation }) => {
               )
             : React.Fragment}
         </View>
-        <View style={styles.subContainer}>
+        {/* <View style={styles.subContainer}>
           <Button
-            style={styles.textInput}
-            icon={<Icon name="input" size={15} color="white" />}
+            style={styles.addButtons}
+            icon={
+              <Ionicons name="person-add-outline" size={15} color="white" />
+            }
             title="Add Friends"
             onPress={() =>
               navigation.push("AddNewFriends", {
@@ -71,8 +74,10 @@ const Friends = ({ route, navigation }) => {
             }
           />
           <Button
-            style={styles.textInput}
-            icon={<Icon name="input" size={15} color="white" />}
+            style={styles.addButtons}
+            icon={
+              <Ionicons name="person-add-outline" size={15} color="white" />
+            }
             title="Pending Friends"
             onPress={() =>
               navigation.push("PendingFriendRequests", {
@@ -80,7 +85,7 @@ const Friends = ({ route, navigation }) => {
               })
             }
           />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -113,14 +118,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  textInput: {
+  addButtons: {
     fontSize: 18,
     margin: 5,
     width: 200,
+    color: "red",
   },
   subContainer: {
     marginBottom: 20,
-    padding: 5,
+    padding: 15,
+    alignItems: "center",
   },
 });
 
