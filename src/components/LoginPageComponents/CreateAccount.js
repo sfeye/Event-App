@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
-//import {Icon} from '"react-native-vector-icons/FontAwesome"'
 import firebase from "firebase";
+import { secondary } from "../../styles/colors";
 
 const CreateAccount = ({ navigation }) => {
   // --- State ----------------- //
@@ -97,7 +97,7 @@ const CreateAccount = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.inputView}>
           <Input
-            leftIcon={<Ionicons name="person" size={20} color="#9FB7B9" />}
+            leftIcon={<Ionicons name="person" size={20} color={secondary} />}
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
@@ -109,7 +109,7 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
-            leftIcon={<Ionicons name="mail" size={20} color="#9FB7B9" />}
+            leftIcon={<Ionicons name="mail" size={20} color={secondary} />}
             style={styles.inputText}
             placeholder="Email"
             value={email}
@@ -121,7 +121,9 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
-            leftIcon={<Ionicons name="lock-closed" size={20} color="#9FB7B9" />}
+            leftIcon={
+              <Ionicons name="lock-closed" size={20} color={secondary} />
+            }
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
@@ -134,7 +136,7 @@ const CreateAccount = ({ navigation }) => {
         </View>
         <View style={styles.inputView}>
           <Input
-            leftIcon={<Ionicons name="call" size={20} color="#9FB7B9" />}
+            leftIcon={<Ionicons name="call" size={20} color={secondary} />}
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}

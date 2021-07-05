@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Avatar } from "react-native-elements";
 import firebase from "firebase";
+import { primary } from "../../styles/colors";
 
 const PendingFriendRequests = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
@@ -185,8 +186,6 @@ const PendingFriendRequests = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   pendingFriendItem: {
     alignItems: "center",
-    //width: "80%",
-    //backgroundColor: "#46B1C9",
     flexDirection: "row",
     margin: 10,
   },
@@ -196,7 +195,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   accBtn: {
-    backgroundColor: "#46B1C9",
+    backgroundColor: primary,
     marginRight: 5,
   },
   decBtn: {
