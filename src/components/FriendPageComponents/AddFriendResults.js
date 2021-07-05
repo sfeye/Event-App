@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Avatar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
+import { primary } from "../../styles/colors";
 
 const AddFriendResults = ({ currentUser, otherUsers }) => {
   const addFriend = (otherId, otherFriends, currentId) => {
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     //width: "80%",
   },
   addBtn: {
-    backgroundColor: "#46B1C9",
+    backgroundColor: primary,
   },
 });
 

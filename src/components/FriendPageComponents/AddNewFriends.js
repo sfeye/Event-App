@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import firebase from "firebase";
 import { SearchBar } from "react-native-elements";
 import AddFriendResults from "./AddFriendResults";
+import { primary } from "../../styles/colors";
 
 const AddNewFriends = ({ route, navigation }) => {
   const [inputText, setInputText] = useState("");
@@ -62,10 +63,10 @@ const AddNewFriends = ({ route, navigation }) => {
         onChangeText={setInputText}
         value={inputText}
         containerStyle={{
-          backgroundColor: "#46B1C9",
+          backgroundColor: primary,
           borderWidth: 0,
-          borderTopColor: "#46B1C9",
-          borderBottomColor: "#46B1C9",
+          borderTopColor: primary,
+          borderBottomColor: primary,
         }}
         inputContainerStyle={{ backgroundColor: "#fff" }}
       />

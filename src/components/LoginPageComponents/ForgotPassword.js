@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
+import { primary } from "../../styles/colors";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     width: "100%",
-    backgroundColor: "#46B1C9",
+    backgroundColor: primary,
     marginTop: 20,
   },
 });

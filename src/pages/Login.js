@@ -14,6 +14,7 @@ import { Button, Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "firebase";
+import { secondary, primary } from "../styles/colors";
 
 const Login = ({ navigation }) => {
   // --- State ----------------- //
@@ -55,7 +56,7 @@ const Login = ({ navigation }) => {
 
         <View style={styles.inputEmail}>
           <Input
-            leftIcon={<Icon name="user" size={20} color="#9FB7B9" />}
+            leftIcon={<Icon name="user" size={20} color={secondary} />}
             style={styles.inputText}
             placeholder="Email"
             value={email}
@@ -67,7 +68,7 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.inputPwd}>
           <Input
-            leftIcon={<Icon name="lock" size={20} color="#9FB7B9" />}
+            leftIcon={<Icon name="lock" size={20} color={secondary} />}
             secureTextEntry
             style={styles.inputText}
             placeholder="Password"
@@ -128,7 +129,7 @@ const Login = ({ navigation }) => {
               style={{
                 flex: 1,
                 height: 1,
-                backgroundColor: "#9FB7B9",
+                backgroundColor: secondary,
               }}
             />
             <View>
@@ -137,14 +138,14 @@ const Login = ({ navigation }) => {
                   textAlign: "center",
                   marginLeft: 5,
                   marginRight: 5,
-                  color: "#9FB7B9",
+                  color: secondary,
                   fontWeight: "600",
                 }}
               >
                 or
               </Text>
             </View>
-            <View style={{ flex: 1, height: 1, backgroundColor: "#9FB7B9" }} />
+            <View style={{ flex: 1, height: 1, backgroundColor: secondary }} />
           </View>
           <Button
             icon={
@@ -205,12 +206,12 @@ const styles = StyleSheet.create({
   },
   signin: {
     width: "100%",
-    backgroundColor: "#46B1C9",
+    backgroundColor: primary,
     marginTop: 20,
   },
   signup: {
     width: "100%",
-    backgroundColor: "#9FB7B9",
+    backgroundColor: secondary,
   },
   inputText: {
     height: 50,
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     color: "blue",
     fontSize: 13,
     marginLeft: "auto",
-    color: "#9FB7B9",
+    color: secondary,
     fontWeight: "700",
   },
   inputView: {

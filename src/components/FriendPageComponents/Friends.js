@@ -60,32 +60,6 @@ const Friends = ({ route, navigation }) => {
               )
             : React.Fragment}
         </View>
-        {/* <View style={styles.subContainer}>
-          <Button
-            style={styles.addButtons}
-            icon={
-              <Ionicons name="person-add-outline" size={15} color="white" />
-            }
-            title="Add Friends"
-            onPress={() =>
-              navigation.push("AddNewFriends", {
-                currentUser: route.params.user,
-              })
-            }
-          />
-          <Button
-            style={styles.addButtons}
-            icon={
-              <Ionicons name="person-add-outline" size={15} color="white" />
-            }
-            title="Pending Friends"
-            onPress={() =>
-              navigation.push("PendingFriendRequests", {
-                currentUser: route.params.user,
-              })
-            }
-          />
-        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
