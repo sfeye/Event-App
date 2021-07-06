@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    paddingTop: 10,
+    paddingTop: 30,
     flex: 1,
     height: "100%",
     backgroundColor: filler_alt,

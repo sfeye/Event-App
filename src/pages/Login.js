@@ -197,6 +197,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     top: 0,
+    margin: 40,
+    borderRadius: 30,
   },
   error: {
     fontSize: 10,

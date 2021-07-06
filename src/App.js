@@ -320,7 +320,7 @@ export default function App() {
               return (
                 <Ionicons
                   name={focused ? "add-circle" : "add-circle-outline"}
-                  size={30}
+                  size={size}
                   color={color}
                 />
               );
@@ -329,7 +329,7 @@ export default function App() {
                 <BadgedIcon
                   type="ionicons"
                   name={focused ? "people" : "people-outline"}
-                  size={30}
+                  size={size}
                   color={color}
                 />
               );
@@ -346,7 +346,7 @@ export default function App() {
           component={HomeStackScreen}
           initialParams={{ user: authUser.email }}
         />
-        <Tabs.Screen name="Search" component={SearchStackScreen} />
+        {/*<Tabs.Screen name="Search" component={SearchStackScreen} />*/}
         <Tabs.Screen
           name="CreateEvent"
           component={CreateEventStackScreen}

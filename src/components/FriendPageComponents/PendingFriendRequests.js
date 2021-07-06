@@ -103,7 +103,8 @@ const PendingFriendRequests = ({ route, navigation }) => {
     const unsubscribe = firebase
       .firestore()
       .collection("users")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         setUser(
           snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -111,9 +112,6 @@ const PendingFriendRequests = ({ route, navigation }) => {
           }))
         );
       });
-    return () => {
-      unsubscribe();
-    };
   }, []);
 
   return (

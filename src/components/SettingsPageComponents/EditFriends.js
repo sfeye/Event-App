@@ -21,9 +21,9 @@ const EditFriends = ({ route, navigation }) => {
     var docIndex = loopThroughDocs(friend);
     alert("but he was such a nice guy... 😢");
 
-    route.params.removeFriend(route.params.id, route.params.friends, friend);
+    updateFriends(route.params.id, route.params.friends, friend);
     if (docIndex !== -1) {
-      route.params.removeFriend(
+      updateFriends(
         docs[docIndex].id,
         docs[docIndex].info.friends,
         route.params.currentUser
@@ -40,6 +40,19 @@ const EditFriends = ({ route, navigation }) => {
     }
     return -1;
   }
+
+  function arrayRemove(arr, value) {
+    return arr.filter(function (ele) {
+      return ele != value;
+    });
+  }
+
+  const updateFriends = (id, friendArr, removedFriend) => {
+    var temp = arrayRemove(friendArr, removedFriend);
+    firebase.firestore().collection("users").doc(id).update({
+      friends: temp,
+    });
+  };
   // --------------------------- //
 
   // --- Read DB --------------- //
