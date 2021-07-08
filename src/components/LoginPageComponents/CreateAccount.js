@@ -10,7 +10,7 @@ import {
 import { Button, Input, Icon } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
-import { secondary } from "../../styles/colors";
+import { primary, secondary } from "../../styles/colors";
 
 const CreateAccount = ({ navigation }) => {
   // --- State ----------------- //
@@ -152,13 +152,15 @@ const CreateAccount = ({ navigation }) => {
           <ActivityIndicator color="#fff" size="large" />
         ) : (
           <Button
-            style={styles.signup}
+            buttonStyle={styles.signup}
+            titleStyle={{ fontSize: 20 }}
             onPress={() => signUpWithEmail()}
             icon={
               <Ionicons
-                name="person-add-outline"
-                size={15}
+                name={isDisabled() ? "person-add-outline" : "person-add"}
+                size={20}
                 color={isDisabled() ? "gray" : "white"}
+                style={{ marginRight: 10 }}
               />
             }
             disabled={isDisabled()}
@@ -252,6 +254,7 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 5,
     margin: 10,
+    backgroundColor: primary,
   },
   signuptext: { fontSize: 20 },
   inputText: {

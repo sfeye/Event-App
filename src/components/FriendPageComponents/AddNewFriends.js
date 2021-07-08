@@ -57,7 +57,7 @@ const AddNewFriends = ({ route, navigation }) => {
   }, []);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "white", height: "100%" }}>
       <SearchBar
         placeholder="Search friends.."
         onChangeText={setInputText}
