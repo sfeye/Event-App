@@ -68,7 +68,6 @@ const Friends = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   safeView: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
     backgroundColor: filler_alt,
   },
   container: {

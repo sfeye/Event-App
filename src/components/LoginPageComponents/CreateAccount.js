@@ -101,7 +101,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setName}
             onFocus={() => setTouchedName(true)}
             errorMessage={touchedName ? validate("name", name) : ""}
@@ -113,7 +113,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Email"
             value={email}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setEmail}
             onFocus={() => setTouchedEmail(true)}
             errorMessage={touchedEmail ? validate("email", email) : ""}
@@ -128,7 +128,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Password"
             value={password}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setPassword}
             onFocus={() => setTouchedPassword(true)}
             errorMessage={touchedPassword ? validate("password", password) : ""}
@@ -140,7 +140,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setPhoneNormal}
             keyboardType="numeric"
             onFocus={() => setTouchedPhone(true)}
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   signuptext: { fontSize: 20 },
   inputText: {
     height: 50,
-    color: "blue",
+    color: secondary,
   },
   inputView: {
     width: "100%",

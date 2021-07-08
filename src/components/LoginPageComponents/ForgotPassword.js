@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Button, Input, Icon } from "react-native-elements";
 import firebase from "firebase";
-import { primary } from "../../styles/colors";
+import { primary, secondary } from "../../styles/colors";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -30,37 +30,41 @@ const ForgotPassword = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <View style={styles.formContainer}>
-          <View style={styles.resetPwdWord}>
-            <Text style={{ fontSize: 28, height: 50 }}>Reset Password!</Text>
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              style={styles.textInput}
-              placeholder="Email"
-              leftIcon={<Icon name="mail" size={24} />}
-              value={email}
-              onChangeText={setEmail}
-              onFocus={() => setTouched(true)}
-              errorMessage={touched ? validate(email) : ""}
-            />
-          </View>
-          <View>
-            <Button
-              buttonStyle={styles.btnStyle}
-              icon={<Icon name="input" size={15} color="white" />}
-              title="Reset"
-              onPress={() => reset()}
-            />
-          </View>
-          {showLoading ? (
-            <View style={styles.activity}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
-            <React.Fragment />
-          )}
+        <View style={styles.subContainer}>
+          <Input
+            style={styles.textInput}
+            placeholder="Email"
+            leftIcon={<Icon name="mail" size={24} color={secondary} />}
+            value={email}
+            placeholderTextColor={secondary}
+            onChangeText={setEmail}
+            onFocus={() => setTouched(true)}
+            errorMessage={touched ? validate(email) : ""}
+          />
         </View>
+        <View>
+          <Button
+            buttonStyle={styles.btnStyle}
+            icon={
+              <Icon
+                name="input"
+                size={15}
+                color="white"
+                style={{ marginRight: 5 }}
+              />
+            }
+            titleStyle={{ fontSize: 20 }}
+            title="Reset"
+            onPress={() => reset()}
+          />
+        </View>
+        {showLoading ? (
+          <View style={styles.activity}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <React.Fragment />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -81,20 +85,17 @@ const validate = (email) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
+    alignItems: "center",
     flex: 1,
-    alignItems: "center",
-    paddingTop: "10%",
   },
-  formContainer: {
-    alignItems: "center",
-    height: 400,
-    padding: 20,
+  textInput: {
+    width: "100%",
+    color: secondary,
   },
   subContainer: {
-    padding: 5,
-    marginTop: 10,
-    width: 300,
-    alignItems: "center",
+    width: "90%",
+    marginTop: "40%",
   },
   activity: {
     position: "absolute",
@@ -106,7 +107,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   btnStyle: {
-    width: "100%",
+    paddingLeft: 30,
+    paddingRight: 30,
     backgroundColor: primary,
     marginTop: 20,
   },

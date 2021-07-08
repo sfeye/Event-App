@@ -51,13 +51,18 @@ const EventInvited = ({ currUser, email, going, declined }) => {
   }
   // --------------------------- //
 
+  // --- Write DB -------------- //
+  const removeInvited = () => {};
+  // --------------------------- //
+
   // --- Read DB --------------- //
   useEffect(() => {
     const unsubscribe = firebase
       .firestore()
       .collection("users")
       .where("email", "==", email)
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         setInvitedFriend(
           snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -65,9 +70,6 @@ const EventInvited = ({ currUser, email, going, declined }) => {
           }))
         );
       });
-    return () => {
-      unsubscribe();
-    };
   }, []);
   // --------------------------- //
 
