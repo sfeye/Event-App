@@ -60,7 +60,7 @@ const Login = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Email"
             value={email}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setEmail}
             errorMessage={touchedEmail ? validate("email", email) : ""}
             onFocus={() => setTouchedEmail(true)}
@@ -73,7 +73,7 @@ const Login = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Password"
             value={password}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setPassword}
             errorMessage={touchedPassword ? validate("password", password) : ""}
             onFocus={() => setTouchedPassword(true)}
@@ -92,9 +92,6 @@ const Login = ({ navigation }) => {
         <View
           style={{
             width: "80%",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "space-between",
           }}
         >
           <Button
@@ -197,6 +194,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     top: 0,
+    margin: 40,
+    borderRadius: 30,
   },
   error: {
     fontSize: 10,
@@ -205,20 +204,21 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   signin: {
-    width: "100%",
+    width: "70%",
     backgroundColor: primary,
     marginTop: 20,
+    alignSelf: "center",
   },
   signup: {
-    width: "100%",
+    width: "70%",
     backgroundColor: secondary,
+    alignSelf: "center",
   },
   inputText: {
     height: 50,
-    color: "blue",
+    color: secondary,
   },
   forgot: {
-    color: "blue",
     fontSize: 13,
     marginLeft: "auto",
     color: secondary,

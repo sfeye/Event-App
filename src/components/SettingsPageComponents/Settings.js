@@ -33,12 +33,6 @@ const Settings = ({ route, navigation }) => {
     return initials.shift().charAt(0) + initials.pop().charAt(0);
   }
 
-  function arrayRemove(arr, value) {
-    return arr.filter(function (ele) {
-      return ele != value;
-    });
-  }
-
   function isDisabledName() {
     return validate("name", userInput) !== "";
   }
@@ -94,13 +88,6 @@ const Settings = ({ route, navigation }) => {
     setPhoneEdit(!phoneEdit);
   };
 
-  const updateFriends = (id, friendArr, removedFriend) => {
-    var temp = arrayRemove(friendArr, removedFriend);
-    firebase.firestore().collection("users").doc(id).update({
-      friends: temp,
-    });
-  };
-
   const deleteImageFromStorage = async (prevUrl) => {
     var ref = firebase.storage().refFromURL(prevUrl);
     ref.delete();
@@ -145,7 +132,8 @@ const Settings = ({ route, navigation }) => {
       .firestore()
       .collection("users")
       .where("email", "==", route.params.user)
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         setUser(
           snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -153,9 +141,6 @@ const Settings = ({ route, navigation }) => {
           }))
         );
       });
-    return () => {
-      unsubscribe();
-    };
   }, []);
   // --------------------------- //
   return (
@@ -282,7 +267,6 @@ const Settings = ({ route, navigation }) => {
                       currentUser: info.email,
                       friends: info.friends,
                       id: id,
-                      removeFriend: updateFriends,
                     })
                   }
                   style={styles.editBtnFriend}
@@ -290,7 +274,7 @@ const Settings = ({ route, navigation }) => {
                   <Text>Edit Friends ({info.friends.length})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => alert("todo")}
+                  onPress={() => alert("Coming soon...")}
                   style={styles.editBtnDelete}
                 >
                   <Text>Delete Account</Text>

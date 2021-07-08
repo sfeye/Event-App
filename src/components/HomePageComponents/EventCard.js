@@ -262,8 +262,7 @@ const EventCard = ({
           </View>
 
           <Button
-            style={styles.createBtn}
-            buttonStyle={{ backgroundColor: primary }}
+            buttonStyle={styles.createBtn}
             icon={
               <Ionicons
                 name="repeat"
@@ -276,8 +275,7 @@ const EventCard = ({
             onPress={() => updateEvent()}
           />
           <Button
-            style={styles.createBtn}
-            buttonStyle={{ backgroundColor: primary }}
+            buttonStyle={styles.createBtn}
             icon={
               <Ionicons
                 name="close-circle"
@@ -428,6 +426,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: "center",
     width: "60%",
+    backgroundColor: primary,
   },
   postedBy: {
     fontWeight: "600",

@@ -126,6 +126,7 @@ export default function App() {
           title: "Create Event",
           headerTitleStyle: {
             color: filler_alt,
+            textAlign: "center",
           },
           headerTintColor: filler_alt,
           headerStyle: {
@@ -146,6 +147,7 @@ export default function App() {
           title: "Search",
           headerTitleStyle: {
             color: filler_alt,
+            textAlign: "center",
           },
           headerTintColor: filler_alt,
           headerStyle: {
@@ -165,6 +167,7 @@ export default function App() {
           title: "Friends",
           headerTitleStyle: {
             color: filler_alt,
+            textAlign: "center",
           },
           headerTintColor: filler_alt,
           headerStyle: {
@@ -242,6 +245,7 @@ export default function App() {
           title: route.params.name + "'s Profile",
           headerTitleStyle: {
             color: filler_alt,
+            textAlign: "center",
           },
           headerTintColor: filler_alt,
           headerStyle: {
@@ -261,6 +265,7 @@ export default function App() {
           title: "Profile",
           headerTitleStyle: {
             color: filler_alt,
+            textAlign: "center",
           },
           headerTintColor: filler_alt,
           headerStyle: {
@@ -320,7 +325,7 @@ export default function App() {
               return (
                 <Ionicons
                   name={focused ? "add-circle" : "add-circle-outline"}
-                  size={30}
+                  size={size}
                   color={color}
                 />
               );
@@ -329,7 +334,7 @@ export default function App() {
                 <BadgedIcon
                   type="ionicons"
                   name={focused ? "people" : "people-outline"}
-                  size={30}
+                  size={size}
                   color={color}
                 />
               );
@@ -346,7 +351,7 @@ export default function App() {
           component={HomeStackScreen}
           initialParams={{ user: authUser.email }}
         />
-        <Tabs.Screen name="Search" component={SearchStackScreen} />
+        {/*<Tabs.Screen name="Search" component={SearchStackScreen} />*/}
         <Tabs.Screen
           name="CreateEvent"
           component={CreateEventStackScreen}
@@ -365,6 +370,7 @@ export default function App() {
           options={{
             headerTitleStyle: {
               color: filler_alt,
+              textAlign: "center",
             },
             headerTintColor: filler_alt,
             headerStyle: {

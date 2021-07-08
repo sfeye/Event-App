@@ -39,7 +39,8 @@ const InviteFriendCard = ({ friend, invitedFriends, addSelected }) => {
       .firestore()
       .collection("users")
       .where("email", "==", friend)
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         setInvitedFriend(
           snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -47,9 +48,6 @@ const InviteFriendCard = ({ friend, invitedFriends, addSelected }) => {
           }))
         );
       });
-    return () => {
-      unsubscribe();
-    };
   }, []);
   // --------------------------- //
   return (

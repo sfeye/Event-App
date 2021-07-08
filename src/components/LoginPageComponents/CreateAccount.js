@@ -10,7 +10,7 @@ import {
 import { Button, Input, Icon } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
-import { secondary } from "../../styles/colors";
+import { primary, secondary } from "../../styles/colors";
 
 const CreateAccount = ({ navigation }) => {
   // --- State ----------------- //
@@ -101,7 +101,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Full Name"
             value={name}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setName}
             onFocus={() => setTouchedName(true)}
             errorMessage={touchedName ? validate("name", name) : ""}
@@ -113,7 +113,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Email"
             value={email}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setEmail}
             onFocus={() => setTouchedEmail(true)}
             errorMessage={touchedEmail ? validate("email", email) : ""}
@@ -128,7 +128,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Password"
             value={password}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setPassword}
             onFocus={() => setTouchedPassword(true)}
             errorMessage={touchedPassword ? validate("password", password) : ""}
@@ -140,7 +140,7 @@ const CreateAccount = ({ navigation }) => {
             style={styles.inputText}
             placeholder="Phone Number"
             value={phoneNumber}
-            placeholderTextColor="#003f5c"
+            placeholderTextColor={secondary}
             onChangeText={setPhoneNormal}
             keyboardType="numeric"
             onFocus={() => setTouchedPhone(true)}
@@ -152,13 +152,15 @@ const CreateAccount = ({ navigation }) => {
           <ActivityIndicator color="#fff" size="large" />
         ) : (
           <Button
-            style={styles.signup}
+            buttonStyle={styles.signup}
+            titleStyle={{ fontSize: 20 }}
             onPress={() => signUpWithEmail()}
             icon={
               <Ionicons
-                name="person-add-outline"
-                size={15}
+                name={isDisabled() ? "person-add-outline" : "person-add"}
+                size={20}
                 color={isDisabled() ? "gray" : "white"}
+                style={{ marginRight: 10 }}
               />
             }
             disabled={isDisabled()}
@@ -252,11 +254,12 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 5,
     margin: 10,
+    backgroundColor: primary,
   },
   signuptext: { fontSize: 20 },
   inputText: {
     height: 50,
-    color: "blue",
+    color: secondary,
   },
   inputView: {
     width: "100%",

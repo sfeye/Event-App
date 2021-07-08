@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
   safeView: {
     flex: 1,
     backgroundColor: filler_alt,
-    paddingTop: StatusBar.currentHeight,
   },
   container: {
     flex: 1,
@@ -106,7 +105,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginTop: "2.5%",
   },
   headerTxt: {
     paddingTop: 7,

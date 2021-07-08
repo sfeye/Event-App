@@ -270,8 +270,7 @@ const CreateEvent = ({ route, navigation }) => {
         </TouchableOpacity>
 
         <Button
-          style={styles.createBtn}
-          buttonStyle={{ backgroundColor: primary }}
+          buttonStyle={styles.createBtn}
           icon={
             <Ionicons
               name="add-circle"
@@ -285,8 +284,7 @@ const CreateEvent = ({ route, navigation }) => {
           disabled={loading || isDisabled()}
         />
         <Button
-          style={styles.createBtn}
-          buttonStyle={{ backgroundColor: primary }}
+          buttonStyle={styles.createBtn}
           icon={
             <Ionicons
               name="refresh-circle"
@@ -333,7 +331,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   container: {
-    paddingTop: 10,
+    paddingTop: 30,
     flex: 1,
     height: "100%",
     backgroundColor: filler_alt,
@@ -351,6 +349,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: "center",
     width: "60%",
+    backgroundColor: primary,
   },
   createTxt: {
     justifyContent: "center",
